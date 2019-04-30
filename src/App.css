@@ -1,1 +1,17 @@
 .App {}
+
+table {
+  max-width: 100%;
+}
+
+table.bordered, table.bordered th, table.bordered td {
+  border: 1px solid #E0E0E0;
+}
+
+table.bordered th, table.bordered td {
+  padding: 2px 5px;
+}
+
+table.bordered thead {
+  background-color: #F2F2F2;
+}

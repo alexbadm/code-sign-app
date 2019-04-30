@@ -1,0 +1,6 @@
+.Participants {
+  height: 100%;
+  max-width: 1000px;
+  overflow: auto;
+  position: relative;
+}

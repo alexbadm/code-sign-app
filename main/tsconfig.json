@@ -1,5 +1,4 @@
 {
-  "extends": "./paths.json",
   "compilerOptions": {
     "target": "es6",
     "lib": [
@@ -16,17 +15,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "types": [
-      "./types/global"
-    ]
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/**/*.test.tsx"
-  ]
+    "types": ["./types/global", "node_modules/@types/node"]
+  }
 }
