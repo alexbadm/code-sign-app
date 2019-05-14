@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-
-export interface IBirthdaySource {
-  fromDate: number;
-  toDate: number;
-}
+import { IBirthdayState as IBirthdaySource } from '../main/interface';
 
 interface IBirthdayProps extends IBirthdaySource {
   participants: any[];

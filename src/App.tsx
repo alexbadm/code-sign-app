@@ -6,11 +6,12 @@ import { Teams } from './pages/Teams';
 import { renderIcon } from './icons';
 import { SummaryOfCities } from './pages/SummaryOfCities';
 import { SummaryOfYears } from './pages/SummaryOfYears';
-import { Birthday, IBirthdaySource } from './pages/Birthday';
+import { Birthday } from './pages/Birthday';
+import { IBirthdayState } from './main/interface';
 // import { ipcRenderer, remote } from 'electron';
 const { remote, ipcRenderer } = window.require('electron');
 
-const participants: any[] = remote.getGlobal('participants');
+const { items: participants } = remote.getGlobal('participants');
 const teams = remote.getGlobal('teams');
 
 interface IAppProps {
@@ -19,7 +20,7 @@ interface IAppProps {
 }
 
 interface IAppState {
-  birthday: IBirthdaySource;
+  birthday: IBirthdayState;
   selected: string;
 }
 
@@ -30,7 +31,7 @@ class App extends Component<IAppProps, IAppState> {
       birthday: remote.getGlobal('birthday'),
       selected: 'Участники',
     };
-    ipcRenderer.on("birthday", (_: any, birthday: IBirthdaySource) => {
+    ipcRenderer.on("birthday", (_: any, birthday: IBirthdayState) => {
       this.setState({ ...this.state, birthday });
     });
   }

@@ -51,14 +51,14 @@ export const Participants: FC<IParticipantsProps> = ({ participants }) => (
     <table className="bordered" cellSpacing="0">
       <thead>
         <tr>
-          {columns.map(c => (
-            <td>{c.Header}</td>
+          {columns.map((c, idx) => (
+            <td key={idx}>{c.Header}</td>
           ))}
         </tr>
       </thead>
       <tbody>
-        {participants.map(p => (
-          <tr>
+        {participants.map((p, idx) => (
+          <tr key={idx}>
             <td>{p.name}</td>
             <td>{p.team}</td>
             <td>{Math.round((today.valueOf() - p.birthDate) / 3153600000) / 10}</td>
