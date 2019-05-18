@@ -15,3 +15,9 @@ table.bordered th, table.bordered td {
 table.bordered thead {
   background-color: #F2F2F2;
 }
+
+.floatingFlags {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

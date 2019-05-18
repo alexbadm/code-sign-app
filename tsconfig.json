@@ -19,7 +19,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "types": [
-      "./src/types"
+      "./src/types",
+      "./src/main/types"
     ]
   },
   "include": [

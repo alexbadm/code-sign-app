@@ -1,11 +1,11 @@
-import { Storage } from "./storage";
-import { IBirthdayState } from './interface';
+import { Storage } from './storage';
+import { AppBirthdayState, AppBirthdayAction } from 'electron';
 
 export class BirthdayStorage extends Storage {
-  protected state!: IBirthdayState;
+  protected readonly state!: AppBirthdayState;
 
   constructor() {
-    super("birthday");
+    super('birthday');
     global.birthday = this.state;
     if (!this.state.fromDate || !this.state.toDate) {
       this.state.fromDate = 1559347200000;
@@ -13,12 +13,9 @@ export class BirthdayStorage extends Storage {
     }
   }
 
-  public ipcMessage([channel, type, newDate]: ['birthday', 'fromDate' | 'toDate', number]): IBirthdayState {
-    if (channel !== this.channel) {
-      return this.state;
-    }
-    this.state[type] = newDate;
-    console.log('[BirthdayStorage] ipcMessage event', [channel, type, newDate]);
+  public ipcMessage(args: AppBirthdayAction): AppBirthdayState {
+    this.state[args.type] = args.newDate;
+    console.log('[BirthdayStorage] ipcMessage event', args);
     return this.state;
   }
 }

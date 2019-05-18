@@ -1,44 +1,44 @@
 import fs from 'fs';
 import path from 'path';
 
-let state = {};
-const filename = path.join(__dirname, "database.json");
+let fromFileState = {};
+const filename = path.join(__dirname, 'database.json');
 try {
-  state = JSON.parse(fs.readFileSync(filename, "utf8"));
+  fromFileState = JSON.parse(fs.readFileSync(filename, 'utf8'));
 } catch (e) {
-  console.log("failed to load database", e);
+  console.log('failed to load database', e);
 }
 
-export class Storage {
-  public static ipcMessage(input: any[]): any {
-    return Storage.instances[input[0]] && Storage.instances[input[0]].ipcMessage(input);
+export abstract class Storage {
+  public static ipcMessage(channel: string, input: any[]): any {
+    const match = Storage.instances[channel];
+    return match
+      ? match.ipcMessage(input)
+      : console.log('[Storage.ipcMessage] not implemented for "%s" channel', channel);
   }
 
   public static save(): void {
     try {
-      fs.writeFileSync(filename, JSON.stringify(Storage.state, null, 2), "utf8");
+      fs.writeFileSync(filename, JSON.stringify(Storage.state, null, 2), 'utf8');
     } catch (e) {
-      console.log("failed to save database", e);
+      console.log('failed to save database', e);
     }
   }
 
-  private static state: { [channel: string]: any } = state;
+  private static readonly state: { [channel: string]: any } = fromFileState;
 
-  private static instances: {
-    [storage: string]: Storage;
+  private static readonly instances: {
+    [channel: string]: Storage;
   } = {};
 
-  protected state: any;
+  protected readonly state: any;
 
   constructor(protected channel: string) {
     this.state = Storage.state[channel] = Storage.state[channel] || {};
-    console.log("[Storage] this.state", this.state);
+    console.log('[Storage] <%s> this.state', channel, this.state);
     Storage.instances[channel] = this;
-    console.log("Storage instances", Storage.instances);
+    console.log('Storage instances', Storage.instances);
   }
 
-  public ipcMessage(input: any[]): any {
-    console.log('[Storage.ipcMessage] not implemented for "%s" channel', input[0]);
-    return undefined;
-  }
+  public abstract ipcMessage(...args: any[]): any;
 }

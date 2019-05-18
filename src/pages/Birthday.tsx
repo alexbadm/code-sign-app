@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { IBirthdayState as IBirthdaySource } from '../main/interface';
+import { AppBirthdayState, AppParticipant } from 'electron';
+const { ipcRenderer } = window.require('electron');
 
-interface IBirthdayProps extends IBirthdaySource {
-  participants: any[];
-  onFromDateChange: (newDate: number) => void;
-  onToDateChange: (newDate: number) => void;
+const changeDate = (type: 'fromDate' | 'toDate', newDate: number) =>
+  ipcRenderer.send('birthday', { type, newDate });
+
+interface IBirthdayProps extends AppBirthdayState {
+  participants: AppParticipant[];
 }
 
 interface IBirthdayState {
@@ -29,12 +31,10 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
   }
 
   onBlur(type: 'fromDate' | 'toDate', newValue: string) {
-    const split = newValue.split(".");
+    const split = newValue.split('.');
     const newDate = new Date(+split[2], +split[1] - 1, +split[0]);
     if (newDate.valueOf() !== this.props[type]) {
-      type === 'fromDate'
-      ? this.props.onFromDateChange(newDate.valueOf())
-      : this.props.onToDateChange(newDate.valueOf());
+      changeDate(type, newDate.valueOf());
     }
   }
 
@@ -87,7 +87,11 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
               .sort((a, b) => {
                 const aDate = new Date(a.birthDate);
                 const bDate = new Date(b.birthDate);
-                const re = aDate.getMonth() * 100 + aDate.getDate() - bDate.getMonth() * 100 - bDate.getDate();
+                const re =
+                  aDate.getMonth() * 100 +
+                  aDate.getDate() -
+                  bDate.getMonth() * 100 -
+                  bDate.getDate();
                 return re;
               })
               .map((p, idx) => {
@@ -109,4 +113,17 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
   }
 }
 
-const monthsMap = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+const monthsMap = [
+  'янв',
+  'фев',
+  'мар',
+  'апр',
+  'май',
+  'июн',
+  'июл',
+  'авг',
+  'сен',
+  'окт',
+  'ноя',
+  'дек',
+];

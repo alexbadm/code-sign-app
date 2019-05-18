@@ -1,5 +1,5 @@
 interface Window {
-  require: any;
+  require: (a: "electron") => typeof import ('electron');
 }
 
 declare module 'react-desktop';

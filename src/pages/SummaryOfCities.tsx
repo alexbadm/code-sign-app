@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
+import { AppParticipant } from 'electron';
 
 interface ISummaryOfCitiesProps {
-  participants: any[];
+  participants: AppParticipant[];
 }
 
 export const SummaryOfCities: FC<ISummaryOfCitiesProps> = ({ participants }) => (

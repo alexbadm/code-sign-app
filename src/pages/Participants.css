@@ -1,6 +1,17 @@
 .Participants {
-  height: 100%;
-  max-width: 1000px;
-  overflow: auto;
-  position: relative;
+  /* height: 100%; */
+  /* max-width: 1000px; */
+  /* overflow: auto; */
+  /* position: relative; */
+}
+
+.Participants .test {
+  border: 2px solid #E0E0E0;
+  margin-bottom: 16px;
+  padding: 8px;
+}
+
+.Participants .test h4 {
+  margin-bottom: 8px;
+  margin-top: 0;
 }

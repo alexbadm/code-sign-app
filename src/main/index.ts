@@ -21,18 +21,21 @@ function createWindow() {
     height: 700,
     center: true,
     title: "КЗ База данных турнира",
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
   win.webContents.openDevTools();
 
-  win.webContents.on('ipc-message', (event, input) => {
-    console.log("[ipc-message]", event, input);
-    win.webContents.send(input[0], Storage.ipcMessage(input));
+  win.webContents.on('ipc-message', (_, channel, args) => {
+    console.log("[ipc-message] <%s>", channel, args);
+    win.webContents.send(channel, Storage.ipcMessage(channel, args));
   });
   win.on('closed', () => {
     console.log("win.on('closed') -> Storage.save()");
     Storage.save();
   });
 
-  win.loadURL(`file://${__dirname}/../build/index.html`);
-  // win.loadURL('http://localhost:3000');
+  // win.loadURL(`file://${__dirname}/../build/index.html`);
+  win.loadURL('http://localhost:3000');
 }

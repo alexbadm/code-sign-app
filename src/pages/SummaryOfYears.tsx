@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
+import { AppParticipant } from 'electron';
 
 interface ISummaryOfYearsProps {
-  participants: any[];
+  participants: AppParticipant[];
 }
 
 const today = new Date();
