@@ -48,8 +48,14 @@ class App extends Component<IAppProps, IAppState> {
       <Window background="#eee" chrome color={this.props.color} theme={this.props.theme}>
         <NavPane openLength={200} color={this.props.color} theme={this.props.theme}>
           {this.renderItem('Участники', <Participants items={this.state.participants.items} />)}
-          {this.renderItem('Сводка по городу', <SummaryOfCities participants={this.state.participants.items} />)}
-          {this.renderItem('Сводка по возрасту', <SummaryOfYears participants={this.state.participants.items} />)}
+          {this.renderItem(
+            'Сводка по городу',
+            <SummaryOfCities participants={this.state.participants.items} />,
+          )}
+          {this.renderItem(
+            'Сводка по возрасту',
+            <SummaryOfYears participants={this.state.participants.items} />,
+          )}
           {this.renderItem(
             'Именинники',
             <Birthday
@@ -58,13 +64,19 @@ class App extends Component<IAppProps, IAppState> {
               participants={this.state.participants.items}
             />,
           )}
-          {this.renderItem('Команды', <Teams state={this.state.teams} participants={this.state.participants.items} />)}
+          {this.renderItem(
+            'Команды',
+            <Teams state={this.state.teams} participants={this.state.participants.items} />,
+          )}
           {this.renderItem('Этапы', <Text>Content 3</Text>)}
           {this.renderItem('Результаты', <Text>Content 4</Text>)}
+
           {this.renderItem('Настройка турнира', <Text>Content 5</Text>)}
           {this.renderItem('Резервное копирование', <Text>Резервное копирование</Text>)}
         </NavPane>
-        <div className="floatingFlags">{this.state.teams.isSealed ? <div>Распределение зафиксировано</div> : null}</div>
+        <div className="floatingFlags">
+          {this.state.teams.isSealed ? <div>Распределение зафиксировано</div> : null}
+        </div>
       </Window>
     );
   }

@@ -1,8 +1,8 @@
-import { app, BrowserWindow } from "electron";
-import { BirthdayStorage } from "./birthday";
-import { ParticipantsStorage } from "./participants";
-import { TeamsStorage } from "./teams";
-import { Storage } from "./storage";
+import { app, BrowserWindow } from 'electron';
+import { BirthdayStorage } from './birthday';
+import { ParticipantsStorage } from './participants';
+import { TeamsStorage } from './teams';
+import { Storage } from './storage';
 
 new BirthdayStorage();
 new ParticipantsStorage();
@@ -20,7 +20,7 @@ function createWindow() {
     width: 1300,
     height: 700,
     center: true,
-    title: "КЗ База данных турнира",
+    title: 'КЗ База данных турнира',
     webPreferences: {
       nodeIntegration: true,
     },
@@ -28,7 +28,7 @@ function createWindow() {
   win.webContents.openDevTools();
 
   win.webContents.on('ipc-message', (_, channel, args) => {
-    console.log("[ipc-message] <%s>", channel, args);
+    console.log('[ipc-message] <%s>', channel, args);
     win.webContents.send(channel, Storage.ipcMessage(channel, args));
   });
   win.on('closed', () => {

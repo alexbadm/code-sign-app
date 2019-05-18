@@ -15,7 +15,9 @@ export const SummaryOfCities: FC<ISummaryOfCitiesProps> = ({ participants }) => 
         </tr>
       </thead>
       <tbody>
-        {Object.entries(participants.reduce((acc: { [city: string]: number }, p): { [city: string]: number } => {
+        {Object.entries(participants.reduce((acc: { [city: string]: number }, p): {
+          [city: string]: number;
+        } => {
           if (!(p.city in acc)) {
             acc[p.city] = 0;
           }

@@ -73,7 +73,7 @@ declare namespace Electron {
 
   interface AppTeamsTeam {
     id: number;
-    name: string|null;
+    name: string | null;
   }
 
   interface AppTeamsState {

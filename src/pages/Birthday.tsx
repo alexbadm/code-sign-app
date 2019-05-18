@@ -52,9 +52,11 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
             <input
               type="text"
               value={this.state.fromDate}
-              onChange={e => this.onChange('fromDate', e.target.value)}
-              onBlur={e => this.onBlur('fromDate', e.target.value)}
-              onKeyDown={e => e.keyCode === 13 && this.onBlur('fromDate', (e.target as any).value)}
+              onChange={(e) => this.onChange('fromDate', e.target.value)}
+              onBlur={(e) => this.onBlur('fromDate', e.target.value)}
+              onKeyDown={(e) =>
+                e.keyCode === 13 && this.onBlur('fromDate', (e.target as any).value)
+              }
             />
           </div>
           <div>
@@ -62,9 +64,9 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
             <input
               type="text"
               value={this.state.toDate}
-              onChange={e => this.onChange('toDate', e.target.value)}
-              onBlur={e => this.onBlur('toDate', e.target.value)}
-              onKeyDown={e => e.keyCode === 13 && this.onBlur('toDate', (e.target as any).value)}
+              onChange={(e) => this.onChange('toDate', e.target.value)}
+              onBlur={(e) => this.onBlur('toDate', e.target.value)}
+              onKeyDown={(e) => e.keyCode === 13 && this.onBlur('toDate', (e.target as any).value)}
             />
           </div>
         </div>

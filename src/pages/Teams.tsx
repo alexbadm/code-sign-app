@@ -33,7 +33,7 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
           min="0"
           disabled={state.config.algorithm !== 'teamSize'}
           value={state.config.teamSize}
-          onChange={e => updateConfig({ ...state.config, teamSize: Number(e.target.value) })}
+          onChange={(e) => updateConfig({ ...state.config, teamSize: Number(e.target.value) })}
         />
       </div>
       <div>
@@ -52,7 +52,7 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
           min="0"
           disabled={state.config.algorithm !== 'teamsCount'}
           value={state.config.teamsCount}
-          onChange={e => updateConfig({ ...state.config, teamsCount: Number(e.target.value) })}
+          onChange={(e) => updateConfig({ ...state.config, teamsCount: Number(e.target.value) })}
         />
       </div>
       <button onClick={appoint}>Распределить</button>
@@ -66,7 +66,7 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
         Участники:
         <ol>
           {participants
-            .filter(p => p.team === team.id)
+            .filter((p) => p.team === team.id)
             .map((p, idx) => (
               <li key={idx}>{p.name}</li>
             ))}
