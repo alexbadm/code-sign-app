@@ -20,9 +20,9 @@ export class TeamsStorage extends Storage {
     }
   }
 
-  public ipcMessage(args: AppTeamsAction): AppTeamsState {
-    console.log('[TeamsStorage] ipcMessage event', args);
-    switch (args.type) {
+  public ipcMessage(action: AppTeamsAction): AppTeamsState {
+    console.log('[TeamsStorage] ipcMessage event', action);
+    switch (action.type) {
       case 'appoint':
         this.appoint();
         break;
@@ -30,10 +30,17 @@ export class TeamsStorage extends Storage {
         this.state.isSealed = true;
         break;
       case 'config':
-        this.state.config = { ...this.state.config, ...args.newConfig };
+        this.state.config = { ...this.state.config, ...action.newConfig };
         break;
+      case 'renameTeam': {
+        const team = this.state.teams.find((t) => t.id === action.teamId);
+        if (team) {
+          team.name = action.newName;
+        }
+        break;
+      }
       default:
-        console.log('[TeamsStorage] unexpected action', args);
+        console.log('[TeamsStorage] unexpected action', action);
     }
     return this.state;
   }
@@ -52,6 +59,7 @@ export class TeamsStorage extends Storage {
         participants.items.forEach((participant, idx) => (participant.team = idx % teamsCount));
         this.state.teams = new Array(teamsCount).fill(null).map((_, id) => ({ id, name: null }));
       }
+      Storage.sendState('participants');
     }
   }
 }

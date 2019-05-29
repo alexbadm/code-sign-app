@@ -47,7 +47,10 @@ class App extends Component<IAppProps, IAppState> {
     return (
       <Window background="#eee" chrome color={this.props.color} theme={this.props.theme}>
         <NavPane openLength={200} color={this.props.color} theme={this.props.theme}>
-          {this.renderItem('Участники', <Participants items={this.state.participants.items} />)}
+          {this.renderItem(
+            'Участники',
+            <Participants items={this.state.participants.items} teams={this.state.teams} />,
+          )}
           {this.renderItem(
             'Сводка по городу',
             <SummaryOfCities participants={this.state.participants.items} />,

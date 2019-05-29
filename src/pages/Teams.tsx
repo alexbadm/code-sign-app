@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { AppTeamsState, AppTeamsConfig, AppParticipant } from 'electron';
+import { Team } from './Team';
 import './Teams.css';
 const { ipcRenderer } = window.require('electron');
 
@@ -56,22 +57,29 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
         />
       </div>
       <button onClick={appoint}>Распределить</button>
-      <button onClick={seal}>Зафиксировать распределение</button>
+      <button
+        onClick={() => {
+          if (state.teams.some((t) => t.name === null)) {
+            window.alert('Не все команды имеют название. Нельзя фиксировать');
+          } else {
+            if (
+              window.confirm(
+                'После выполнения фиксации некоторые операции станут недоступны.' +
+                  ' Данное действие необратимо.' +
+                  ' Пожалуйста, убедитесь что все участники верно распределены по командам' +
+                  ' и названия команд утверждены и больше не будут меняться.',
+              )
+            ) {
+              seal();
+            }
+          }
+        }}
+      >
+        Зафиксировать распределение
+      </button>
     </div>
     {state.teams.map((team, idx) => (
-      <div key={idx} className="team">
-        <h2 title={`id#${team.id}`}>
-          {team.name === null ? '<название команды не установлено>' : team.name}
-        </h2>
-        Участники:
-        <ol>
-          {participants
-            .filter((p) => p.team === team.id)
-            .map((p, idx) => (
-              <li key={idx}>{p.name}</li>
-            ))}
-        </ol>
-      </div>
+      <Team key={idx} team={team} isSealed={state.isSealed} allParticipants={participants} />
     ))}
   </div>
 );

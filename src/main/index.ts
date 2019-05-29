@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, AppChannel, AppAction } from 'electron';
 import { BirthdayStorage } from './birthday';
 import { ParticipantsStorage } from './participants';
 import { TeamsStorage } from './teams';
@@ -14,8 +14,6 @@ app.on('ready', createWindow);
 // });
 
 function createWindow() {
-  // const win = new BrowserWindow({ width: 1000, height: 700, frame: false });
-
   const win = new BrowserWindow({
     width: 1300,
     height: 700,
@@ -25,17 +23,20 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-  win.webContents.openDevTools();
 
-  win.webContents.on('ipc-message', (_, channel, args) => {
-    console.log('[ipc-message] <%s>', channel, args);
-    win.webContents.send(channel, Storage.ipcMessage(channel, args));
+  win.webContents.on('ipc-message', (_, channel: AppChannel, action: AppAction) => {
+    console.log('[ipc-message] <%s>', channel, action);
+    Storage.handleIpcMessage(channel, action);
+    // win.webContents.send(channel, Storage.ipcMessage(channel, action));
   });
+
   win.on('closed', () => {
     console.log("win.on('closed') -> Storage.save()");
     Storage.save();
   });
 
+  Storage.registerWebContents(win.webContents);
+  win.webContents.openDevTools();
   // win.loadURL(`file://${__dirname}/../build/index.html`);
   win.loadURL('http://localhost:3000');
 }

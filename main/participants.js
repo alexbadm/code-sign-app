@@ -19,7 +19,7 @@ class ParticipantsStorage extends storage_1.Storage {
                 this.state.items.push(...args.participants);
                 break;
             case 'deleteFakes':
-                this.state.items = this.state.items.filter(p => !p.isTest);
+                this.state.items = this.state.items.filter((p) => !p.isTest);
                 break;
             default:
                 console.log('[ParticipantsStorage] unexpected action', args);

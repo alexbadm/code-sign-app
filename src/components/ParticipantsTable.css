@@ -1,0 +1,10 @@
+.ParticipantsTable .years {
+  text-align: right;
+}
+.ParticipantsTable .tenth {
+  color: #828282;
+  font-size: smaller;
+}
+.ParticipantsTable .tenth:before {
+  content: '.';
+}

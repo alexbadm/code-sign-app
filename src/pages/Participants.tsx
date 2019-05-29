@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 import faker from 'faker';
 import './Participants.css';
-import { AppParticipantsState, AppParticipant } from 'electron';
+import { AppParticipantsState, AppParticipant, AppTeamsState } from 'electron';
+import { ParticipantsTable } from '../components/ParticipantsTable';
 const { ipcRenderer } = window.require('electron');
 
-const today = new Date();
-
-export const Participants: FC<AppParticipantsState> = ({ items }) => (
+export const Participants: FC<AppParticipantsState & { teams: AppTeamsState }> = ({
+  items,
+  teams,
+}) => (
   <div className="Participants">
     <div className="test">
       <h4>Testing</h4>
@@ -40,36 +42,7 @@ export const Participants: FC<AppParticipantsState> = ({ items }) => (
         Remove test data
       </button>
     </div>
-    <table className="bordered" cellSpacing="0">
-      <thead>
-        <tr>
-          <td title="Фамилия и имя">Ф.И.</td>
-          <td>команда</td>
-          <td>кол-во лет</td>
-          <td>нас.пункт</td>
-          <td title="Участвовал ли в КЗ ранее">ветеран</td>
-          <td>рост, см</td>
-          <td>вес, кг</td>
-          <td title="Индекс массы тела">ИМТ</td>
-          <td>родитель</td>
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((p, idx) => (
-          <tr key={idx}>
-            <td>{p.name}</td>
-            <td>{p.team === null ? '<не распределен>' : p.team}</td>
-            <td>{Math.round((today.valueOf() - p.birthDate) / 3153600000) / 10}</td>
-            <td>{p.city}</td>
-            <td>{p.veteran ? 'да' : 'нет'}</td>
-            <td>{p.height}</td>
-            <td>{p.weight}</td>
-            <td>{p.bmi}</td>
-            <td>{p.parent}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ParticipantsTable items={items} teams={teams.teams} />
   </div>
 );
 
@@ -93,7 +66,6 @@ function generateFakeParticipant(): AppParticipant {
   return {
     name: faker.name.findName(),
     team: null,
-    years: faker.random.number(120) / 10 + 6, // to delete
     birthDate: faker.random.number(433900800000) + 946684800000,
     city: getCities()[faker.random.number(citiesCount - 1)],
     veteran: faker.random.boolean(),

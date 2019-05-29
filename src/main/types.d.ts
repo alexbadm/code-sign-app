@@ -24,6 +24,22 @@ declare namespace Electron {
     send(channel: 'teams', action: AppTeamsAction): void;
   }
 
+  interface WebContents extends EventEmitter {
+    on(
+      event: 'ipc-message',
+      listener: (event: Event, channel: AppChannel, action: AppAction) => void,
+    ): this;
+    once(
+      event: 'ipc-message',
+      listener: (event: Event, channel: AppChannel, action: AppAction) => void,
+    ): this;
+    send(channel: AppChannel, state: AppStorageState): void;
+  }
+
+  type AppChannel = 'birthday' | 'participants' | 'teams';
+  type AppAction = AppBirthdayAction | AppParticipantsAction | AppTeamsAction;
+  type AppStorageState = AppBirthdayState | AppParticipantsState | AppTeamsState;
+
   interface AppBirthdayState {
     fromDate: number;
     toDate: number;
@@ -41,7 +57,6 @@ declare namespace Electron {
   interface AppParticipant {
     name: string;
     team: number | null;
-    years: number; // to delete
     birthDate: number;
     city: any;
     veteran: boolean;
@@ -88,5 +103,10 @@ declare namespace Electron {
     | {
         type: 'config';
         newConfig: AppTeamsConfig;
+      }
+    | {
+        type: 'renameTeam';
+        teamId: number;
+        newName: string;
       };
 }

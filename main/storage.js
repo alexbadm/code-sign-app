@@ -21,11 +21,14 @@ class Storage {
         Storage.instances[channel] = this;
         console.log('Storage instances', Storage.instances);
     }
-    static ipcMessage(channel, input) {
-        const match = Storage.instances[channel];
-        return match
-            ? match.ipcMessage(input)
-            : console.log('[Storage.ipcMessage] not implemented for "%s" channel', channel);
+    static handleIpcMessage(channel, action) {
+        const store = Storage.instances[channel];
+        if (store && Storage.webContents) {
+            Storage.webContents.send(channel, store.ipcMessage(action));
+        }
+    }
+    static registerWebContents(wc) {
+        Storage.webContents = wc;
     }
     static save() {
         try {
@@ -33,6 +36,12 @@ class Storage {
         }
         catch (e) {
             console.log('failed to save database', e);
+        }
+    }
+    static sendState(channel) {
+        const store = Storage.instances[channel];
+        if (store && Storage.webContents) {
+            Storage.webContents.send(channel, store.state);
         }
     }
 }
