@@ -3,6 +3,8 @@ declare namespace NodeJS {
     birthday: Electron.AppBirthdayState;
     participants: Electron.AppParticipantsState;
     teams: Electron.AppTeamsState;
+
+    databasePath: string;
   }
 }
 

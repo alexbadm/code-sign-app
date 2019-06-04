@@ -3,12 +3,20 @@ import path from 'path';
 import { WebContents, AppChannel, AppAction, AppStorageState } from 'electron';
 
 let fromFileState = {};
-const filename = path.join(__dirname, 'database.json');
+const dirname = path.dirname(process.argv[0]); // __dirname;
+const filename = path.join(dirname, 'database.json');
+global.databasePath = filename;
+console.log('Database path is: "%s"', filename);
+
 try {
   fromFileState = JSON.parse(fs.readFileSync(filename, 'utf8'));
 } catch (e) {
-  console.log('failed to load database', e);
+  if (e.code === 'ENOENT') {
+    fs.writeFileSync(filename, new Uint8Array(0));
+  }
 }
+
+fs.accessSync(filename, fs.constants.R_OK | fs.constants.W_OK);
 
 export abstract class Storage {
   public static handleIpcMessage(channel: AppChannel, action: AppAction): void {
