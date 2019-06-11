@@ -1,6 +1,6 @@
 {
   "name": "code-sign-app",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "main": "main",
   "homepage": ".",
@@ -19,7 +19,7 @@
     "fix": "prettier-tslint fix 'src/**/*.ts{,x}'",
     "lint": "prettier-tslint check 'src/**/*.ts{,x}'",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder build -wl"
   },
   "build": {
     "appId": "com.electron.${name}",
@@ -37,8 +37,17 @@
         ]
       }
     ],
+    "linux": {
+      "target": [{
+        "target": "7z",
+        "arch": ["x64"]
+      }]
+    },
     "win": {
-      "target": "7z"
+      "target": [{
+        "target": "7z",
+        "arch": ["x64", "ia32"]
+      }]
     },
     "publish": {
       "provider": "github",
