@@ -38,7 +38,7 @@
       }
     ],
     "win": {
-      "target": "nsis"
+      "target": "7z"
     },
     "publish": {
       "provider": "github",

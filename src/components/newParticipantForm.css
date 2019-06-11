@@ -1,0 +1,25 @@
+.NewParticipantForm input[type=text] {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.NewParticipantForm button + button {
+  margin-left: 16px;
+}
+
+.NewParticipantForm .input {
+  margin-bottom: 16px;
+}
+
+.NewParticipantForm .TextInput input {
+  margin-top: 4px;
+  border: 2px solid #BDBDBD;
+  padding: 6px 4px;
+}
+
+.NewParticipantForm .Checkbox input {
+  height: 18px;
+  margin: 0 4px 0 0;
+  vertical-align: bottom;
+  width: 18px;
+}

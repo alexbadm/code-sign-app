@@ -1,17 +1,25 @@
 import React, { FC } from 'react';
+import { Button } from 'react-desktop/windows';
 import faker from 'faker';
 import './Participants.css';
 import { AppParticipantsState, AppParticipant, AppTeamsState } from 'electron';
 import { ParticipantsTable } from '../components/ParticipantsTable';
 const { ipcRenderer } = window.require('electron');
 
-export const Participants: FC<AppParticipantsState & { teams: AppTeamsState }> = ({
+export const Participants: FC<AppParticipantsState & { teams: AppTeamsState, showModal: () => void }> = ({
   items,
   teams,
+  showModal,
 }) => (
   <div className="Participants">
+    <Button
+      color="#2D9CDB"
+      onClick={showModal}
+      children="Добавить участника"
+      style={{ marginBottom: 16 }}
+    />
     <div className="test">
-      <h4>Testing</h4>
+      <h4>Тестирование</h4>
       <button
         onClick={() =>
           ipcRenderer.send('participants', {

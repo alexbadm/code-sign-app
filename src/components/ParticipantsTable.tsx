@@ -41,7 +41,7 @@ export const ParticipantsTable: FC<{ items: AppParticipant[]; teams?: AppTeamsTe
                 {p.team === null
                   ? '<не распределен>'
                   : p.team in teamsIndex
-                  ? teamsIndex[p.team].name
+                  ? teamsIndex[p.team].name || '<unnamed> #' + p.team
                   : ''}
               </td>
               <td>{new Date(p.birthDate).toLocaleDateString('ru')}</td>

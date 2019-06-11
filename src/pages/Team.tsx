@@ -60,7 +60,7 @@ export class Team extends Component<ITeamProps, ITeamState> {
           </div>
         ) : (
           <h2 title={`id#${team.id}`}>
-            {team.name === null ? '<название команды не установлено>' : team.name}
+            {team.name === null ? '<unnamed> #' + team.id : team.name}
             {isSealed ? null : (
               <button onClick={() => this.setState({ ...this.state, isEditing: true })}>
                 Править

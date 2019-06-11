@@ -36,7 +36,11 @@ function createWindow() {
   });
 
   Storage.registerWebContents(win.webContents);
-  // win.webContents.openDevTools();
-  win.loadURL(`file://${__dirname}/../build/index.html`);
-  // win.loadURL('http://localhost:3000');
+
+  if (process.env.NODE_ENV === 'development') {
+    win.webContents.openDevTools();
+    win.loadURL('http://localhost:3000');
+  } else {
+    win.loadURL(`file://${__dirname}/../build/index.html`);
+  }
 }

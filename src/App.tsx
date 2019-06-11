@@ -4,6 +4,8 @@ import './App.css';
 import { Participants } from './pages/Participants';
 import { Teams } from './pages/Teams';
 import { renderIcon } from './icons';
+import { Modal } from './components/modal';
+import { NewParticipantForm } from './components/newParticipantForm';
 import { SummaryOfCities } from './pages/SummaryOfCities';
 import { SummaryOfYears } from './pages/SummaryOfYears';
 import { Birthday } from './pages/Birthday';
@@ -21,6 +23,7 @@ interface IAppState {
   participants: AppParticipantsState;
   selected: string;
   teams: AppTeamsState;
+  isModalShown: boolean;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -31,6 +34,7 @@ class App extends Component<IAppProps, IAppState> {
       participants: remote.getGlobal('participants'),
       selected: 'Участники',
       teams: remote.getGlobal('teams'),
+      isModalShown: false,
     };
     ipcRenderer.on('birthday', (_: any, birthday: AppBirthdayState) => {
       this.setState({ ...this.state, birthday });
@@ -49,7 +53,11 @@ class App extends Component<IAppProps, IAppState> {
         <NavPane openLength={200} color={this.props.color} theme={this.props.theme}>
           {this.renderItem(
             'Участники',
-            <Participants items={this.state.participants.items} teams={this.state.teams} />,
+            <Participants
+              items={this.state.participants.items}
+              teams={this.state.teams}
+              showModal={() => this.setState({ ...this.state, isModalShown: true })}
+            />,
           )}
           {this.renderItem(
             'Сводка по городу',
@@ -80,6 +88,16 @@ class App extends Component<IAppProps, IAppState> {
         <div className="floatingFlags">
           {this.state.teams.isSealed ? <div>Распределение зафиксировано</div> : null}
         </div>
+        {this.state.isModalShown ? (
+          <Modal
+            height={600}
+            width={400}
+            onBackgroundClick={() => this.setState({ ...this.state, isModalShown: false })}
+            children={<NewParticipantForm />}
+          />
+        ) : (
+          <div />
+        )}
       </Window>
     );
   }
