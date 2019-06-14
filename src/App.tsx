@@ -1,15 +1,15 @@
+import { AppBirthdayState, AppParticipant, AppParticipantsState, AppTeamsState } from 'electron';
 import React, { Component } from 'react';
-import { Window, Text, NavPane, NavPaneItem } from 'react-desktop/windows';
+import { NavPane, NavPaneItem, Text, Window } from 'react-desktop/windows';
 import './App.css';
-import { Participants } from './pages/Participants';
-import { Teams } from './pages/Teams';
-import { renderIcon } from './icons';
 import { Modal } from './components/modal';
-import { NewParticipantForm } from './components/newParticipantForm';
+import { ParticipantForm } from './components/ParticipantForm';
+import { renderIcon } from './icons';
+import { Birthday } from './pages/Birthday';
+import { Participants } from './pages/Participants';
 import { SummaryOfCities } from './pages/SummaryOfCities';
 import { SummaryOfYears } from './pages/SummaryOfYears';
-import { Birthday } from './pages/Birthday';
-import { AppBirthdayState, AppTeamsState, AppParticipantsState } from 'electron';
+import { Teams } from './pages/Teams';
 
 const { remote, ipcRenderer } = window.require('electron');
 
@@ -24,6 +24,7 @@ interface IAppState {
   selected: string;
   teams: AppTeamsState;
   isModalShown: boolean;
+  modalEditParticipant: AppParticipant | undefined;
 }
 
 class App extends Component<IAppProps, IAppState> {
@@ -31,10 +32,11 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
     this.state = {
       birthday: remote.getGlobal('birthday'),
+      isModalShown: false,
+      modalEditParticipant: undefined,
       participants: remote.getGlobal('participants'),
       selected: 'Участники',
       teams: remote.getGlobal('teams'),
-      isModalShown: false,
     };
     ipcRenderer.on('birthday', (_: any, birthday: AppBirthdayState) => {
       this.setState({ ...this.state, birthday });
@@ -47,16 +49,19 @@ class App extends Component<IAppProps, IAppState> {
     });
   }
 
-  render() {
+  public render() {
+    const showModal = (modalEditParticipant?: AppParticipant) => {
+      this.setState({ ...this.state, isModalShown: true, modalEditParticipant });
+    };
     return (
-      <Window background="#eee" chrome color={this.props.color} theme={this.props.theme}>
+      <Window background="#eee" chrome={true} color={this.props.color} theme={this.props.theme}>
         <NavPane openLength={200} color={this.props.color} theme={this.props.theme}>
           {this.renderItem(
             'Участники',
             <Participants
               items={this.state.participants.items}
               teams={this.state.teams}
-              showModal={() => this.setState({ ...this.state, isModalShown: true })}
+              showModal={showModal}
             />,
           )}
           {this.renderItem(
@@ -77,7 +82,11 @@ class App extends Component<IAppProps, IAppState> {
           )}
           {this.renderItem(
             'Команды',
-            <Teams state={this.state.teams} participants={this.state.participants.items} />,
+            <Teams
+              state={this.state.teams}
+              participants={this.state.participants.items}
+              showModal={showModal}
+            />,
           )}
           {this.renderItem('Этапы', <Text>Content 3</Text>)}
           {this.renderItem('Результаты', <Text>Content 4</Text>)}
@@ -93,8 +102,19 @@ class App extends Component<IAppProps, IAppState> {
             height={600}
             width={400}
             onBackgroundClick={() => this.setState({ ...this.state, isModalShown: false })}
-            children={<NewParticipantForm />}
-          />
+          >
+            <ParticipantForm
+              teams={this.state.teams.teams}
+              editParticipant={this.state.modalEditParticipant}
+              closeModal={() =>
+                this.setState({
+                  ...this.state,
+                  isModalShown: false,
+                  modalEditParticipant: undefined,
+                })
+              }
+            />
+          </Modal>
         ) : (
           <div />
         )}
@@ -102,7 +122,7 @@ class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  renderItem(title: string, content: JSX.Element) {
+  private renderItem(title: string, content: JSX.Element) {
     return (
       <NavPaneItem
         title={title}

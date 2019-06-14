@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { AppParticipant } from 'electron';
+import React, { FC } from 'react';
 
 interface ISummaryOfCitiesProps {
   participants: AppParticipant[];

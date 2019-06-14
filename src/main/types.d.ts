@@ -79,6 +79,15 @@ declare namespace Electron {
         participants: AppParticipant[];
       }
     | {
+        type: 'editParticipant';
+        name: string;
+        participant: AppParticipant;
+      }
+    | {
+        type: 'deleteParticipant';
+        name: string;
+      }
+    | {
         type: 'deleteFakes';
       };
 

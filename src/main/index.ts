@@ -1,8 +1,8 @@
-import { app, BrowserWindow, AppChannel, AppAction } from 'electron';
+import { app, AppAction, AppChannel, BrowserWindow } from 'electron';
 import { BirthdayStorage } from './birthday';
 import { ParticipantsStorage } from './participants';
-import { TeamsStorage } from './teams';
 import { Storage } from './storage';
+import { TeamsStorage } from './teams';
 
 new BirthdayStorage();
 new ParticipantsStorage();

@@ -1,6 +1,6 @@
+import { AppAction, AppChannel, AppStorageState, WebContents } from 'electron';
 import fs from 'fs';
 import path from 'path';
-import { WebContents, AppChannel, AppAction, AppStorageState } from 'electron';
 
 let fromFileState = {};
 const dirname = path.dirname(process.argv[0]); // __dirname;

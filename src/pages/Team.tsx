@@ -1,74 +1,100 @@
+import { AppParticipant, AppTeamsTeam } from 'electron';
 import React, { Component } from 'react';
-import { AppTeamsTeam, AppParticipant } from 'electron';
 import { ParticipantsTable } from '../components/ParticipantsTable';
 const { ipcRenderer } = window.require('electron');
 
 const setTeamName = (teamId: number, newName: string) =>
   ipcRenderer.send('teams', {
-    type: 'renameTeam',
-    teamId,
     newName,
+    teamId,
+    type: 'renameTeam',
   });
 
 interface ITeamProps {
   isSealed: boolean;
   team: AppTeamsTeam;
   allParticipants: AppParticipant[];
+  showModal?: (p: AppParticipant) => void;
 }
 
 interface ITeamState {
-  editingName: string;
-  isEditing: boolean;
+  nameChanged: boolean;
 }
 
 export class Team extends Component<ITeamProps, ITeamState> {
+  private nameTextRef: React.RefObject<HTMLSpanElement>;
+
   constructor(props: ITeamProps) {
     super(props);
     this.state = {
-      editingName: props.team.name || '',
-      isEditing: false,
+      nameChanged: false,
     };
+    this.nameTextRef = React.createRef();
   }
 
-  render() {
-    const { isSealed, team, allParticipants } = this.props;
+  public render() {
+    const { isSealed, team, allParticipants, showModal } = this.props;
+    const defaultText = team.name === null ? '<unnamed> #' + team.id : team.name;
     return (
       <div className="Team">
-        {this.state.isEditing ? (
-          <div>
-            <input
-              type="text"
-              value={this.state.editingName}
-              onChange={(e) =>
-                this.setState({
-                  ...this.state,
-                  editingName: e.target.value,
-                })
+        <h2>
+          <span
+            ref={this.nameTextRef}
+            contentEditable={!isSealed}
+            suppressContentEditableWarning={true}
+            children={defaultText}
+            onKeyDown={(e) => {
+              if (e.keyCode === 13) {
+                e.preventDefault();
+                const el = e.target as HTMLSpanElement;
+                if (el && el.innerText !== team.name && el.innerText) {
+                  setTeamName(this.props.team.id, el.innerText);
+                  this.setState({ ...this.state, nameChanged: false });
+                }
               }
-            />
-            <button
-              onClick={() => {
-                setTeamName(this.props.team.id, this.state.editingName);
-                this.setState({ ...this.state, isEditing: false });
-              }}
-            >
-              Сохранить
-            </button>
-            <button onClick={() => this.setState({ ...this.state, isEditing: false })}>
-              Отменить
-            </button>
-          </div>
-        ) : (
-          <h2 title={`id#${team.id}`}>
-            {team.name === null ? '<unnamed> #' + team.id : team.name}
-            {isSealed ? null : (
-              <button onClick={() => this.setState({ ...this.state, isEditing: true })}>
-                Править
-              </button>
-            )}
-          </h2>
-        )}
-        <ParticipantsTable items={allParticipants.filter((p) => p.team === team.id)} />
+            }}
+            onInput={() => {
+              const headerEl = this.nameTextRef.current;
+              if (headerEl && headerEl.innerText !== team.name && !this.state.nameChanged) {
+                this.setState({ ...this.state, nameChanged: true });
+              }
+            }}
+          />
+          {this.state.nameChanged ? (
+            <span>
+              &nbsp;
+              <span
+                role="img"
+                onClick={() => {
+                  const headerEl = this.nameTextRef.current;
+                  if (headerEl && headerEl.innerText !== team.name && headerEl.innerText) {
+                    setTeamName(this.props.team.id, headerEl.innerText);
+                    this.setState({ ...this.state, nameChanged: false });
+                  }
+                }}
+              >
+                ✔️
+              </span>
+              &nbsp;
+              <span
+                role="img"
+                onClick={() => {
+                  this.setState({ ...this.state, nameChanged: false });
+                  const headerEl = this.nameTextRef.current;
+                  if (headerEl) {
+                    headerEl.innerText = defaultText;
+                  }
+                }}
+              >
+                ✖️
+              </span>
+            </span>
+          ) : null}
+        </h2>
+        <ParticipantsTable
+          items={allParticipants.filter((p) => p.team === team.id)}
+          editParticipant={showModal}
+        />
       </div>
     );
   }

@@ -1,5 +1,5 @@
+import { AppParticipantsAction, AppParticipantsState } from 'electron';
 import { Storage } from './storage';
-import { AppParticipantsState, AppParticipantsAction } from 'electron';
 
 export class ParticipantsStorage extends Storage {
   protected readonly state!: AppParticipantsState;
@@ -20,6 +20,16 @@ export class ParticipantsStorage extends Storage {
         break;
       case 'addParticipants':
         this.state.items.push(...args.participants);
+        break;
+      case 'editParticipant': {
+        const target = this.state.items.find((p) => p.name === args.name);
+        if (target) {
+          Object.assign(target, args.participant);
+        }
+        break;
+      }
+      case 'deleteParticipant':
+        this.state.items = this.state.items.filter((p) => p.name !== args.name);
         break;
       case 'deleteFakes':
         this.state.items = this.state.items.filter((p) => !p.isTest);

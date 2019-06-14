@@ -1,5 +1,5 @@
+import { AppBirthdayAction, AppBirthdayState } from 'electron';
 import { Storage } from './storage';
-import { AppBirthdayState, AppBirthdayAction } from 'electron';
 
 export class BirthdayStorage extends Storage {
   protected readonly state!: AppBirthdayState;

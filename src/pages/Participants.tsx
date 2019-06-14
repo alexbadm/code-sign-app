@@ -1,20 +1,18 @@
+import { AppParticipant, AppParticipantsState, AppTeamsState } from 'electron';
+import faker from 'faker';
 import React, { FC } from 'react';
 import { Button } from 'react-desktop/windows';
-import faker from 'faker';
-import './Participants.css';
-import { AppParticipantsState, AppParticipant, AppTeamsState } from 'electron';
 import { ParticipantsTable } from '../components/ParticipantsTable';
+import './Participants.css';
 const { ipcRenderer } = window.require('electron');
 
-export const Participants: FC<AppParticipantsState & { teams: AppTeamsState, showModal: () => void }> = ({
-  items,
-  teams,
-  showModal,
-}) => (
+export const Participants: FC<
+  AppParticipantsState & { teams: AppTeamsState; showModal: (p?: AppParticipant) => void }
+> = ({ items, teams, showModal }) => (
   <div className="Participants">
     <Button
       color="#2D9CDB"
-      onClick={showModal}
+      onClick={() => showModal()}
       children="Добавить участника"
       style={{ marginBottom: 16 }}
     />
@@ -23,8 +21,8 @@ export const Participants: FC<AppParticipantsState & { teams: AppTeamsState, sho
       <button
         onClick={() =>
           ipcRenderer.send('participants', {
-            type: 'addParticipant',
             participant: generateFakeParticipant(),
+            type: 'addParticipant',
           })
         }
       >
@@ -33,8 +31,8 @@ export const Participants: FC<AppParticipantsState & { teams: AppTeamsState, sho
       <button
         onClick={() =>
           ipcRenderer.send('participants', {
-            type: 'addParticipants',
             participants: generateFakeParticipants(30),
+            type: 'addParticipants',
           })
         }
       >
@@ -50,7 +48,7 @@ export const Participants: FC<AppParticipantsState & { teams: AppTeamsState, sho
         Remove test data
       </button>
     </div>
-    <ParticipantsTable items={items} teams={teams.teams} />
+    <ParticipantsTable items={items} teams={teams.teams} editParticipant={showModal} />
   </div>
 );
 
@@ -72,16 +70,16 @@ function generateFakeParticipant(): AppParticipant {
   const height = faker.random.number(60) + 120;
   const weight = faker.random.number(70) + 25;
   return {
-    name: faker.name.findName(),
-    team: null,
     birthDate: faker.random.number(433900800000) + 946684800000,
-    city: getCities()[faker.random.number(citiesCount - 1)],
-    veteran: faker.random.boolean(),
-    height,
-    weight,
     bmi: (((weight / Math.pow(height / 100, 2)) * 10) | 0) / 10,
-    parent: faker.fake('{{phone.phoneNumber}} {{name.firstName}}'),
+    city: getCities()[faker.random.number(citiesCount - 1)],
+    height,
     isTest: true,
+    name: faker.name.findName(),
+    parent: faker.fake('{{phone.phoneNumber}} {{name.firstName}}'),
+    team: null,
+    veteran: faker.random.boolean(),
+    weight,
   };
 }
 

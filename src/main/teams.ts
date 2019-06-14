@@ -1,5 +1,5 @@
+import { AppTeamsAction, AppTeamsState } from 'electron';
 import { Storage } from './storage';
-import { AppTeamsState, AppTeamsAction } from 'electron';
 
 export class TeamsStorage extends Storage {
   protected state!: AppTeamsState;

@@ -1,0 +1,16 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:latest", "tslint-react", "tslint-config-prettier"
+    ],
+    "jsRules": {
+        "no-console": false
+    },
+    "rules": {
+        "jsx-no-lambda": false,
+        "no-bitwise": false,
+        "no-implicit-dependencies": false,
+        "no-submodule-imports": false
+    },
+    "rulesDirectory": ["tslint-plugin-prettier"]
+}

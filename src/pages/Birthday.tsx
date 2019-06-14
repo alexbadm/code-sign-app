@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
 import { AppBirthdayState, AppParticipant } from 'electron';
+import React, { Component } from 'react';
 const { ipcRenderer } = window.require('electron');
 
 const changeDate = (type: 'fromDate' | 'toDate', newDate: number) =>
@@ -23,22 +23,7 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
     };
   }
 
-  onChange(type: 'fromDate' | 'toDate', newValue: string) {
-    this.setState({
-      ...this.state,
-      [type]: newValue,
-    });
-  }
-
-  onBlur(type: 'fromDate' | 'toDate', newValue: string) {
-    const split = newValue.split('.');
-    const newDate = new Date(+split[2], +split[1] - 1, +split[0]);
-    if (newDate.valueOf() !== this.props[type]) {
-      changeDate(type, newDate.valueOf());
-    }
-  }
-
-  render() {
+  public render() {
     const { participants } = this.props;
     const fromDateDate = new Date(this.props.fromDate);
     const toDateDate = new Date(this.props.toDate);
@@ -112,6 +97,21 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
         </table>
       </div>
     );
+  }
+
+  private onChange(type: 'fromDate' | 'toDate', newValue: string) {
+    this.setState({
+      ...this.state,
+      [type]: newValue,
+    });
+  }
+
+  private onBlur(type: 'fromDate' | 'toDate', newValue: string) {
+    const split = newValue.split('.');
+    const newDate = new Date(+split[2], +split[1] - 1, +split[0]);
+    if (newDate.valueOf() !== this.props[type]) {
+      changeDate(type, newDate.valueOf());
+    }
   }
 }
 

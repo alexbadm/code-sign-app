@@ -1,5 +1,5 @@
+import { AppParticipant, AppTeamsConfig, AppTeamsState } from 'electron';
 import React, { FC } from 'react';
-import { AppTeamsState, AppTeamsConfig, AppParticipant } from 'electron';
 import { Team } from './Team';
 import './Teams.css';
 const { ipcRenderer } = window.require('electron');
@@ -8,14 +8,17 @@ const appoint = () => ipcRenderer.send('teams', { type: 'appoint' });
 const seal = () => ipcRenderer.send('teams', { type: 'seal' });
 const updateConfig = (newConfig: AppTeamsConfig) =>
   ipcRenderer.send('teams', {
-    type: 'config',
     newConfig,
+    type: 'config',
   });
 
-export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }> = ({
-  state,
-  participants,
-}) => (
+interface ITeamsProps {
+  state: AppTeamsState;
+  participants: AppParticipant[];
+  showModal?: (p: AppParticipant) => void;
+}
+
+export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => (
   <div className="Teams">
     <div className="config">
       <div>
@@ -25,7 +28,7 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
           value="teamSize"
           checked={state.config.algorithm === 'teamSize'}
           onClick={() => updateConfig({ ...state.config, algorithm: 'teamSize' })}
-          readOnly
+          readOnly={true}
         />
         <label>Размер команды</label>
         <input
@@ -44,7 +47,7 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
           value="teamsCount"
           checked={state.config.algorithm === 'teamsCount'}
           onClick={() => updateConfig({ ...state.config, algorithm: 'teamsCount' })}
-          readOnly
+          readOnly={true}
         />
         <label>Количество команд</label>
         <input
@@ -79,7 +82,13 @@ export const Teams: FC<{ state: AppTeamsState; participants: AppParticipant[] }>
       </button>
     </div>
     {state.teams.map((team, idx) => (
-      <Team key={idx} team={team} isSealed={state.isSealed} allParticipants={participants} />
+      <Team
+        key={idx}
+        team={team}
+        isSealed={state.isSealed}
+        allParticipants={participants}
+        showModal={showModal}
+      />
     ))}
   </div>
 );

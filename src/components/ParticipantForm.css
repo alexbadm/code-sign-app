@@ -1,23 +1,23 @@
-.NewParticipantForm input[type=text] {
+.ParticipantForm input[type=text] {
   box-sizing: border-box;
   width: 100%;
 }
 
-.NewParticipantForm button + button {
+.ParticipantForm button + button {
   margin-left: 16px;
 }
 
-.NewParticipantForm .input {
+.ParticipantForm .input {
   margin-bottom: 16px;
 }
 
-.NewParticipantForm .TextInput input {
+.ParticipantForm .TextInput input {
   margin-top: 4px;
   border: 2px solid #BDBDBD;
   padding: 6px 4px;
 }
 
-.NewParticipantForm .Checkbox input {
+.ParticipantForm .Checkbox input {
   height: 18px;
   margin: 0 4px 0 0;
   vertical-align: bottom;
