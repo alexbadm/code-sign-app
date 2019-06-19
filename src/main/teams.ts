@@ -1,4 +1,4 @@
-import { AppTeamsAction, AppTeamsState } from 'electron';
+import { AppParticipant, AppTeamsAction, AppTeamsState, AppTeamsTeam } from 'electron';
 import { Storage } from './storage';
 
 export class TeamsStorage extends Storage {
@@ -14,6 +14,13 @@ export class TeamsStorage extends Storage {
         teamsCount: 15,
       };
     }
+    if (!this.state.lastAppliedConfig) {
+      this.state.lastAppliedConfig = {
+        algorithm: 'teamSize',
+        teamSize: 1000,
+        teamsCount: 1000,
+      };
+    }
     this.state.isSealed = !!this.state.isSealed;
     if (!this.state.teams) {
       this.state.teams = [];
@@ -26,6 +33,7 @@ export class TeamsStorage extends Storage {
       case 'appoint':
         if (!this.state.isSealed) {
           this.appoint();
+          this.state.lastAppliedConfig = this.state.config;
         }
         break;
       case 'seal':
@@ -58,14 +66,17 @@ export class TeamsStorage extends Storage {
       if (this.state.config.algorithm === 'teamSize') {
         const teamSize = this.state.config.teamSize;
         const teamsCount = Math.round(count / teamSize);
-        participants.items.forEach((participant, idx) => (participant.team = idx % teamsCount));
-        this.state.teams = new Array(teamsCount).fill(null).map((_, id) => ({ id, name: null }));
+        this.state.teams = distribute(participants.items, teamsCount);
       } else {
         const teamsCount = this.state.config.teamsCount;
-        participants.items.forEach((participant, idx) => (participant.team = idx % teamsCount));
-        this.state.teams = new Array(teamsCount).fill(null).map((_, id) => ({ id, name: null }));
+        this.state.teams = distribute(participants.items, teamsCount);
       }
       Storage.sendState('participants');
     }
   }
+}
+
+function distribute(participants: AppParticipant[], teamsCount: number): AppTeamsTeam[] {
+  participants.forEach((participant, idx) => (participant.team = idx % teamsCount));
+  return new Array(teamsCount).fill(null).map((_, id) => ({ id, name: null }));
 }

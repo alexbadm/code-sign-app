@@ -24,6 +24,7 @@
   min-width: 220px;
   padding: 16px 24px 10px;
   margin-right: 16px;
+  position: relative;
 }
 
 .Teams.editable .config .algo-type {
@@ -37,6 +38,13 @@
 .Teams .config .algo-type.active {
   color: #333;
   background-color: rgba(45, 156, 219, 0.1);
+}
+
+.Teams .config.changed .algo-type.active::before {
+  content: "⚠️";
+  position: absolute;
+  top: 8px;
+  right: 12px;
 }
 
 .Teams .config label {
@@ -67,18 +75,6 @@
   margin: 16px 0;
 }
 
-.Teams .amount {
-}
-
-.Teams .distribution {
-  width: 210px;
-  display: flex;
-  justify-content: left;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.Teams .distribution > div {
-  flex: 0 0 auto;
-  width: 70px;
+.Teams .summary h3 {
+  margin-bottom: 0.6em;
 }

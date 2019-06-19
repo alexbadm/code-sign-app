@@ -104,6 +104,7 @@ declare namespace Electron {
 
   interface AppTeamsState {
     config: AppTeamsConfig;
+    lastAppliedConfig: AppTeamsConfig;
     isSealed: boolean;
     teams: AppTeamsTeam[];
   }
