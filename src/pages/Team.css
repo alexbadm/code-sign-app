@@ -1,0 +1,9 @@
+.Team {
+  position: relative;
+}
+
+.Team .helper-text {
+  color: gray;
+  position: relative;
+  top: -6px;
+}

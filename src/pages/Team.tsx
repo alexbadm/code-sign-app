@@ -1,6 +1,7 @@
 import { AppParticipant, AppTeamsTeam } from 'electron';
 import React, { Component } from 'react';
 import { ParticipantsTable } from '../components/ParticipantsTable';
+import './Team.css';
 const { ipcRenderer } = window.require('electron');
 
 const setTeamName = (teamId: number, newName: string) =>
@@ -35,6 +36,7 @@ export class Team extends Component<ITeamProps, ITeamState> {
   public render() {
     const { isSealed, team, allParticipants, showModal } = this.props;
     const defaultText = team.name === null ? '<unnamed> #' + team.id : team.name;
+    const filteredParticipants = allParticipants.filter((p) => p.team === team.id);
     return (
       <div className="Team">
         <h2>
@@ -91,10 +93,8 @@ export class Team extends Component<ITeamProps, ITeamState> {
             </span>
           ) : null}
         </h2>
-        <ParticipantsTable
-          items={allParticipants.filter((p) => p.team === team.id)}
-          editParticipant={showModal}
-        />
+        <div className="helper-text">Количество участников: {filteredParticipants.length}</div>
+        <ParticipantsTable items={filteredParticipants} editParticipant={showModal} />
       </div>
     );
   }

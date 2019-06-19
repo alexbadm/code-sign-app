@@ -99,6 +99,24 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => (
         </div>
       )}
     </div>
+    <div className="summary">
+      <div className="amount">Всего команд: {state.teams.length}</div>
+      Распределение участников по командам
+      <div className="distribution">
+        {Object.entries(
+          participants.reduce((acc: { [k: string]: number }, p: AppParticipant) => {
+            if (p.team !== null) {
+              acc[p.team] = 1 + (acc[p.team] || 0);
+            }
+            return acc;
+          }, {}),
+        ).map((k, idx) => (
+          <div key={idx}>
+            {k[0]}: {k[1]}
+          </div>
+        ))}
+      </div>
+    </div>
     {state.teams.map((team, idx) => (
       <Team
         key={idx}
