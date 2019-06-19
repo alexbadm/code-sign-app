@@ -69,7 +69,7 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
               .filter(({ birthDate }) => {
                 const birthDateDate = new Date(birthDate);
                 const birthDateScalar = birthDateDate.getMonth() * 100 + birthDateDate.getDate();
-                return birthDateScalar > fromDateScalar && birthDateScalar < toDateScalar;
+                return birthDateScalar >= fromDateScalar && birthDateScalar <= toDateScalar;
               })
               .sort((a, b) => {
                 const aDate = new Date(a.birthDate);
