@@ -77,6 +77,37 @@ export class TeamsStorage extends Storage {
 }
 
 function distribute(participants: AppParticipant[], teamsCount: number): AppTeamsTeam[] {
-  participants.forEach((participant, idx) => (participant.team = idx % teamsCount));
+  const today = Date.now();
+  const data = participants.map((ref) => ({
+    bmi: Math.round(ref.bmi / 4),
+    city: hash(ref.city),
+    height: Math.round(ref.height / 6),
+    ref,
+    veteran: +ref.veteran,
+    years: Math.round((today.valueOf() - ref.birthDate) / 63072000000),
+    toJSON() {
+      return { bmi: this.bmi, city: this.city, height: this.height, years: this.years };
+    },
+  }));
+  data.sort((a, b) => {
+    return (
+      a.veteran - b.veteran ||
+      a.city - b.city ||
+      a.years - b.years ||
+      a.bmi - b.bmi ||
+      a.height - b.height
+    );
+  });
+  data.forEach((d, idx) => (d.ref.team = idx % teamsCount));
+  console.log(JSON.stringify(data, null, 2));
   return new Array(teamsCount).fill(null).map((_, id) => ({ id, name: null }));
+}
+
+function hash(str: string): number {
+  let result = 0;
+  let i = 0;
+  while (i < str.length) {
+    result += str[i].charCodeAt(0) << i++ % 24;
+  }
+  return result;
 }

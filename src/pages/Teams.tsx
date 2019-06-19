@@ -115,9 +115,10 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
               <th>#</th>
               <th>команда</th>
               <th>кол-во уч.</th>
-              <th>средний рост</th>
-              <th>средний вес</th>
-              <th>средний возраст</th>
+              <th title="средний/макс/мин">рост</th>
+              <th title="средний/макс/мин">вес</th>
+              <th title="средний/макс/мин">ИМТ</th>
+              <th title="средний/макс/мин">возраст</th>
               <th>уникальных городов</th>
               <th>доля ветеранов</th>
             </tr>
@@ -132,21 +133,39 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
                   {Math.round(
                     participants.reduce((sum, p) => sum + p.height, 0) / participants.length,
                   )}
+                  /{participants.reduce((max, p) => Math.max(max, p.height), 0)}/
+                  {participants.reduce((min, p) => Math.min(min, p.height), 999)}
                 </td>
                 <td>
                   {Math.round(
                     participants.reduce((sum, p) => sum + p.weight, 0) / participants.length,
                   )}
+                  /{participants.reduce((max, p) => Math.max(max, p.weight), 0)}/
+                  {participants.reduce((min, p) => Math.min(min, p.weight), 999)}
+                </td>
+                <td>
+                  {Math.round(
+                    participants.reduce((sum, p) => sum + p.bmi, 0) / participants.length,
+                  )}
+                  /{participants.reduce((max, p) => Math.max(max, p.bmi), 0)}/
+                  {participants.reduce((min, p) => Math.min(min, p.bmi), 999)}
                 </td>
                 <td>
                   {Math.round(
                     (Date.now() -
                       participants.reduce((sum, p) => sum + p.birthDate, 0) / participants.length) /
-                      1000 /
-                      60 /
-                      60 /
-                      24 /
-                      365,
+                      31536000000,
+                  )}
+                  /
+                  {Math.round(
+                    (Date.now() -
+                      participants.reduce((min, p) => Math.min(min, p.birthDate), Date.now())) /
+                      31536000000,
+                  )}
+                  /
+                  {Math.round(
+                    (Date.now() - participants.reduce((max, p) => Math.max(max, p.birthDate), 0)) /
+                      31536000000,
                   )}
                 </td>
                 <td>
