@@ -24,18 +24,24 @@ export class TeamsStorage extends Storage {
     console.log('[TeamsStorage] ipcMessage event', action);
     switch (action.type) {
       case 'appoint':
-        this.appoint();
+        if (!this.state.isSealed) {
+          this.appoint();
+        }
         break;
       case 'seal':
         this.state.isSealed = true;
         break;
       case 'config':
-        this.state.config = { ...this.state.config, ...action.newConfig };
+        if (!this.state.isSealed) {
+          this.state.config = { ...this.state.config, ...action.newConfig };
+        }
         break;
       case 'renameTeam': {
-        const team = this.state.teams.find((t) => t.id === action.teamId);
-        if (team) {
-          team.name = action.newName;
+        if (!this.state.isSealed) {
+          const team = this.state.teams.find((t) => t.id === action.teamId);
+          if (team) {
+            team.name = action.newName;
+          }
         }
         break;
       }

@@ -2,7 +2,66 @@
 }
 
 .Teams .config {
-  border: 2px solid #e0e0e0;
+  /* border: 2px solid #e0e0e0; */
+  display: inline-block;
   margin-bottom: 16px;
-  padding: 8px;
+  /* padding: 8px; */
+}
+
+.Teams .config .has-sealed {
+  color: #777;
+  display: none;
+  margin: 8px 0 4px;
+}
+
+.Teams .config .algo-wrap {
+  display: flex;
+  flex-direction: row;
+}
+
+.Teams .config .algo-type {
+  border: 1px solid rgba(45, 156, 219, 0.6);
+  color: #777;
+  cursor: default;
+  flex: 1 1 auto;
+  min-width: 220px;
+  padding: 16px 24px 10px;
+  margin-right: 16px;
+}
+
+.Teams.editable .config .algo-type {
+  cursor: pointer;
+}
+
+.Teams.sealed .config .has-sealed {
+  display: block;
+}
+
+.Teams .config .algo-type.active {
+  color: #333;
+  background-color: rgba(45, 156, 219, 0.1);
+}
+
+.Teams .config label {
+  cursor: inherit;
+  font-size: larger;
+  display: block;
+  text-align: center;
+}
+
+.Teams .config input[type=number] {
+  display: block;
+  text-align: center;
+  min-width: 200px;
+  margin: 8px auto;
+  font-size: inherit;
+  line-height: 1.4;
+}
+
+.Teams .config .buttons {
+  margin-top: 16px;
+}
+
+.Teams .config button {
+  margin-right: 16px;
 }
