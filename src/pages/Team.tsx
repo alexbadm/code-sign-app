@@ -14,7 +14,7 @@ const setTeamName = (teamId: number, newName: string) =>
 interface ITeamProps {
   isSealed: boolean;
   team: AppTeamsTeam;
-  allParticipants: AppParticipant[];
+  participants: AppParticipant[];
   showModal?: (p: AppParticipant) => void;
 }
 
@@ -34,9 +34,8 @@ export class Team extends Component<ITeamProps, ITeamState> {
   }
 
   public render() {
-    const { isSealed, team, allParticipants, showModal } = this.props;
+    const { isSealed, team, participants, showModal } = this.props;
     const defaultText = team.name === null ? '<unnamed> #' + team.id : team.name;
-    const filteredParticipants = allParticipants.filter((p) => p.team === team.id);
     return (
       <div className="Team">
         <h2>
@@ -93,8 +92,8 @@ export class Team extends Component<ITeamProps, ITeamState> {
             </span>
           ) : null}
         </h2>
-        <div className="helper-text">Количество участников: {filteredParticipants.length}</div>
-        <ParticipantsTable items={filteredParticipants} editParticipant={showModal} />
+        <div className="helper-text">Количество участников: {participants.length}</div>
+        <ParticipantsTable items={participants} editParticipant={showModal} />
       </div>
     );
   }

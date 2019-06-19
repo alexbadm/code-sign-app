@@ -8,3 +8,6 @@
 .ParticipantsTable .tenth:before {
   content: '.';
 }
+.ParticipantsTable span[role=img] {
+  cursor: pointer;
+}

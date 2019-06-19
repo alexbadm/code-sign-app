@@ -118,6 +118,8 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
               <th>средний рост</th>
               <th>средний вес</th>
               <th>средний возраст</th>
+              <th>уникальных городов</th>
+              <th>доля ветеранов</th>
             </tr>
           </thead>
           <tbody>
@@ -147,6 +149,26 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
                       365,
                   )}
                 </td>
+                <td>
+                  {Math.round(
+                    (participants.reduce(
+                      (cities: string[], p) =>
+                        !~cities.indexOf(p.city) ? [...cities, p.city] : cities,
+                      [],
+                    ).length /
+                      participants.length) *
+                      100,
+                  )}
+                  %
+                </td>
+                <td>
+                  {Math.round(
+                    (participants.reduce((sum: number, p) => sum + (p.veteran ? 1 : 0), 0) /
+                      participants.length) *
+                      100,
+                  )}
+                  %
+                </td>
               </tr>
             ))}
           </tbody>
@@ -158,19 +180,10 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
           key={idx}
           team={team}
           isSealed={state.isSealed}
-          allParticipants={participants}
+          participants={participants}
           showModal={showModal}
         />
       ))}
-      {/* {state.teams.map((team, idx) => (
-        <Team
-          key={idx}
-          team={team}
-          isSealed={state.isSealed}
-          allParticipants={participants}
-          showModal={showModal}
-        />
-      ))} */}
     </div>
   );
 };
