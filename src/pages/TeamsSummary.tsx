@@ -21,7 +21,7 @@ export const TeamsSummary: FC<{ teammates: ITeamComposition[] }> = ({ teammates 
           <th>ИМТ</th>
           <th>возраст</th>
           <th>уникальных городов</th>
-          <th>доля ветеранов</th>
+          <th>ветеранов</th>
         </tr>
       </thead>
       <tbody>

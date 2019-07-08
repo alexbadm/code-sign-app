@@ -13,7 +13,8 @@ export function renderIcon(name: string) {
       // return <span className="Icon">🚸</span>;
       return <span className="Icon">👕</span>;
     case 'Именинники':
-      return <span className="Icon">🎁</span>;
+      return <span className="Icon">🎂</span>;
+      // return <span className="Icon">🎁</span>;
     // return <span className="Icon">🎉</span>;
     case 'Этапы':
       return <span className="Icon">🎯</span>;
