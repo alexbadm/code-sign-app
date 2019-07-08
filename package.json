@@ -1,6 +1,6 @@
 {
   "name": "code-sign-app",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "private": true,
   "main": "main",
   "homepage": ".",
@@ -104,6 +104,6 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }  
+    }
   }
 }
