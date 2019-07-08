@@ -59,9 +59,9 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
         <table className="bordered" cellSpacing="0">
           <thead>
             <tr>
-              <td>Дата</td>
-              <td>Именинники</td>
-              <td>Дата рождения</td>
+              <td>День рождения</td>
+              <td>Имя</td>
+              <td>Полная дата рождения</td>
             </tr>
           </thead>
           <tbody>
@@ -86,7 +86,7 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
                 return (
                   <tr key={idx}>
                     <td>
-                      {monthsMap[birthDate.getMonth()]} {birthDate.getDate()}
+                      {birthDate.getDate()} {monthsMap[birthDate.getMonth()]}
                     </td>
                     <td>{p.name}</td>
                     <td>{birthDate.toLocaleDateString('ru')}</td>
@@ -116,16 +116,16 @@ export class Birthday extends Component<IBirthdayProps, IBirthdayState> {
 }
 
 const monthsMap = [
-  'янв',
-  'фев',
-  'мар',
-  'апр',
-  'май',
-  'июн',
-  'июл',
-  'авг',
-  'сен',
-  'окт',
-  'ноя',
-  'дек',
+  'января',
+  'февраля',
+  'марта',
+  'апреля',
+  'мая',
+  'июня',
+  'июля',
+  'августа',
+  'сентября',
+  'октября',
+  'ноября',
+  'декабря',
 ];

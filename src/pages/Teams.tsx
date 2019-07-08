@@ -1,8 +1,9 @@
-import { AppParticipant, AppTeamsConfig, AppTeamsState } from 'electron';
+import { AppParticipant, AppTeamsConfig, AppTeamsState, AppTeamsTeam } from 'electron';
 import React, { FC } from 'react';
 import { Button } from 'react-desktop/windows';
 import { Team } from './Team';
 import './Teams.css';
+import { ITeamComposition, TeamsSummary } from './TeamsSummary';
 const { ipcRenderer } = window.require('electron');
 
 const appoint = () => ipcRenderer.send('teams', { type: 'appoint' });
@@ -20,10 +21,14 @@ interface ITeamsProps {
 }
 
 export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
-  const teammates = state.teams.map((team) => ({
+  const teammates: ITeamComposition[] = state.teams.map((team) => ({
     participants: participants.filter((p) => p.team === team.id),
     team,
   }));
+  const unassigned: ITeamComposition = {
+    participants: participants.filter((p) => p.team === null),
+    team: { id: -1, name: 'Нераспределенные участники' },
+  };
   const configHasChanges =
     state.config.algorithm !== state.lastAppliedConfig.algorithm ||
     state.config.teamSize !== state.lastAppliedConfig.teamSize ||
@@ -90,109 +95,33 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
               onClick={() => {
                 if (state.teams.some((t) => t.name === null)) {
                   window.alert('Не все команды имеют название. Нельзя фиксировать');
-                } else {
-                  if (
-                    window.confirm(
-                      'После выполнения фиксации некоторые операции станут недоступны.' +
-                        ' Данное действие необратимо.' +
-                        ' Пожалуйста, убедитесь что все участники верно распределены по командам' +
-                        ' и названия команд утверждены и больше не будут меняться.',
-                    )
-                  ) {
-                    seal();
-                  }
+                } else if (unassigned.participants.length) {
+                  window.alert('Не все участники распределены по командам. Нельзя фиксировать');
+                } else if (
+                  window.confirm(
+                    `        После выполнения фиксации станут недоступны некоторые операции, такие как автоматическое распределение и переименование команд.
+
+        Изменение состава команд останется доступным только в ручном режиме.
+
+        Отменить фиксацию нельзя. Пожалуйста, убедитесь что все участники верно распределены по командам и названия команд утверждены и больше не будут меняться.`,
+                  )
+                ) {
+                  seal();
                 }
               }}
             />
           </div>
         )}
       </div>
-      <div className="summary">
-        <h3>Сводка по командам</h3>
-        <table className="bordered" cellSpacing="0">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>команда</th>
-              <th>кол-во уч.</th>
-              <th title="средний/макс/мин">рост</th>
-              <th title="средний/макс/мин">вес</th>
-              <th title="средний/макс/мин">ИМТ</th>
-              <th title="средний/макс/мин">возраст</th>
-              <th>уникальных городов</th>
-              <th>доля ветеранов</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teammates.map(({ team, participants }, idx) => (
-              <tr key={idx}>
-                <td>{team.id}</td>
-                <td>{team.name}</td>
-                <td>{participants.length}</td>
-                <td>
-                  {Math.round(
-                    participants.reduce((sum, p) => sum + p.height, 0) / participants.length,
-                  )}
-                  /{participants.reduce((max, p) => Math.max(max, p.height), 0)}/
-                  {participants.reduce((min, p) => Math.min(min, p.height), 999)}
-                </td>
-                <td>
-                  {Math.round(
-                    participants.reduce((sum, p) => sum + p.weight, 0) / participants.length,
-                  )}
-                  /{participants.reduce((max, p) => Math.max(max, p.weight), 0)}/
-                  {participants.reduce((min, p) => Math.min(min, p.weight), 999)}
-                </td>
-                <td>
-                  {Math.round(
-                    participants.reduce((sum, p) => sum + p.bmi, 0) / participants.length,
-                  )}
-                  /{participants.reduce((max, p) => Math.max(max, p.bmi), 0)}/
-                  {participants.reduce((min, p) => Math.min(min, p.bmi), 999)}
-                </td>
-                <td>
-                  {Math.round(
-                    (Date.now() -
-                      participants.reduce((sum, p) => sum + p.birthDate, 0) / participants.length) /
-                      31536000000,
-                  )}
-                  /
-                  {Math.round(
-                    (Date.now() -
-                      participants.reduce((min, p) => Math.min(min, p.birthDate), Date.now())) /
-                      31536000000,
-                  )}
-                  /
-                  {Math.round(
-                    (Date.now() - participants.reduce((max, p) => Math.max(max, p.birthDate), 0)) /
-                      31536000000,
-                  )}
-                </td>
-                <td>
-                  {Math.round(
-                    (participants.reduce(
-                      (cities: string[], p) =>
-                        !~cities.indexOf(p.city) ? [...cities, p.city] : cities,
-                      [],
-                    ).length /
-                      participants.length) *
-                      100,
-                  )}
-                  %
-                </td>
-                <td>
-                  {Math.round(
-                    (participants.reduce((sum: number, p) => sum + (p.veteran ? 1 : 0), 0) /
-                      participants.length) *
-                      100,
-                  )}
-                  %
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <TeamsSummary teammates={teammates.concat(unassigned)} />
+      {unassigned.participants.length ? (
+        <Team
+          team={unassigned.team}
+          isSealed={true}
+          participants={unassigned.participants}
+          showModal={showModal}
+        />
+      ) : null}
       <h1>Команды</h1>
       {teammates.map(({ team, participants }, idx) => (
         <Team

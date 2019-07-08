@@ -21,13 +21,15 @@ interface IPartFormState {
   height: string;
   weight: string;
   parent: string;
+  isTest: boolean;
 }
 
-const clearState: IPartFormState = {
+const clearState: Readonly<IPartFormState> = {
   birthDate: '',
   birthDateOk: false,
   city: '',
   height: '',
+  isTest: false,
   name: '',
   parent: '',
   team: null,
@@ -44,6 +46,7 @@ export class ParticipantForm extends Component<IPartFormProps, IPartFormState> {
         birthDateOk: true,
         city: props.editParticipant.city,
         height: String(props.editParticipant.height),
+        isTest: props.editParticipant.isTest,
         name: props.editParticipant.name,
         parent: props.editParticipant.parent,
         team: props.editParticipant.team,
@@ -152,7 +155,7 @@ export class ParticipantForm extends Component<IPartFormProps, IPartFormState> {
               bmi: (((weight / Math.pow(height / 100, 2)) * 10) | 0) / 10,
               city: this.state.city,
               height,
-              isTest: false,
+              isTest: this.state.isTest,
               name: this.state.name,
               parent: this.state.parent,
               team: this.state.team,

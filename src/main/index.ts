@@ -4,6 +4,8 @@ import { ParticipantsStorage } from './participants';
 import { Storage } from './storage';
 import { TeamsStorage } from './teams';
 
+// tslint:disable: no-unused-expression
+
 new BirthdayStorage();
 new ParticipantsStorage();
 new TeamsStorage();
@@ -15,14 +17,17 @@ app.on('ready', createWindow);
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1300,
-    height: 700,
     center: true,
+    height: 700,
+    // show: false,
     title: 'КЗ База данных турнира',
     webPreferences: {
       nodeIntegration: true,
     },
+    width: 1300,
   });
+  win.maximize();
+  // win.show();
 
   win.webContents.on('ipc-message', (_, channel: AppChannel, action: AppAction) => {
     console.log('[ipc-message] <%s>', channel, action);

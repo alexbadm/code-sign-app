@@ -9,6 +9,7 @@
     "rules": {
         "jsx-no-lambda": false,
         "no-bitwise": false,
+        "no-console": false,
         "no-implicit-dependencies": false,
         "no-submodule-imports": false
     },
