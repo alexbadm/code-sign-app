@@ -1,4 +1,10 @@
-import { AppBirthdayState, AppParticipant, AppParticipantsState, AppTeamsState } from 'electron';
+import {
+  AppBirthdayState,
+  AppParticipant,
+  AppParticipantsState,
+  AppStagesState,
+  AppTeamsState,
+} from 'electron';
 import React, { Component } from 'react';
 import { NavPane, NavPaneItem, Text, Window } from 'react-desktop/windows';
 import './App.css';
@@ -7,9 +13,11 @@ import { ParticipantForm } from './components/ParticipantForm';
 import { renderIcon } from './icons';
 import { Birthday } from './pages/Birthday';
 import { Participants } from './pages/Participants';
+import { Stages } from './pages/Stages';
 import { SummaryOfCities } from './pages/SummaryOfCities';
 import { SummaryOfYears } from './pages/SummaryOfYears';
 import { Teams } from './pages/Teams';
+import './table.css';
 
 const { remote, ipcRenderer } = window.require('electron');
 
@@ -22,6 +30,7 @@ interface IAppState {
   birthday: AppBirthdayState;
   participants: AppParticipantsState;
   selected: string;
+  stages: AppStagesState;
   teams: AppTeamsState;
   isModalShown: boolean;
   modalEditParticipant: AppParticipant | undefined;
@@ -36,6 +45,7 @@ class App extends Component<IAppProps, IAppState> {
       modalEditParticipant: undefined,
       participants: remote.getGlobal('participants'),
       selected: 'Участники',
+      stages: remote.getGlobal('stages'),
       teams: remote.getGlobal('teams'),
     };
     ipcRenderer.on('birthday', (_: any, birthday: AppBirthdayState) => {
@@ -43,6 +53,9 @@ class App extends Component<IAppProps, IAppState> {
     });
     ipcRenderer.on('participants', (_: any, participants: AppParticipantsState) => {
       this.setState({ ...this.state, participants });
+    });
+    ipcRenderer.on('stages', (_: any, stages: AppStagesState) => {
+      this.setState({ ...this.state, stages });
     });
     ipcRenderer.on('teams', (_: any, teams: AppTeamsState) => {
       this.setState({ ...this.state, teams });
@@ -88,7 +101,7 @@ class App extends Component<IAppProps, IAppState> {
               showModal={showModal}
             />,
           )}
-          {this.renderItem('Этапы', <Text>Content 3</Text>)}
+          {this.renderItem('Этапы', <Stages stages={this.state.stages} teams={this.state.teams} />)}
           {this.renderItem('Результаты', <Text>Content 4</Text>)}
 
           {this.renderItem('Настройка турнира', <Text>Content 5</Text>)}

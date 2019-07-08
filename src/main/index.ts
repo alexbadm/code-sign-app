@@ -1,6 +1,7 @@
 import { app, AppAction, AppChannel, BrowserWindow } from 'electron';
 import { BirthdayStorage } from './birthday';
 import { ParticipantsStorage } from './participants';
+import { StagesStorage } from './stages';
 import { Storage } from './storage';
 import { TeamsStorage } from './teams';
 
@@ -8,6 +9,7 @@ import { TeamsStorage } from './teams';
 
 new BirthdayStorage();
 new ParticipantsStorage();
+new StagesStorage();
 new TeamsStorage();
 app.on('ready', createWindow);
 // app.on('before-quit', () => {

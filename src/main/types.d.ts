@@ -2,6 +2,7 @@ declare namespace NodeJS {
   interface Global {
     birthday: Electron.AppBirthdayState;
     participants: Electron.AppParticipantsState;
+    stages: Electron.AppStagesState;
     teams: Electron.AppTeamsState;
 
     databasePath: string;
@@ -12,6 +13,7 @@ declare namespace Electron {
   interface Remote extends MainInterface {
     getGlobal(name: 'birthday'): AppBirthdayState;
     getGlobal(name: 'participants'): AppParticipantsState;
+    getGlobal(name: 'stages'): AppStagesState;
     getGlobal(name: 'teams'): AppTeamsState;
   }
 
@@ -21,6 +23,9 @@ declare namespace Electron {
 
     on(channel: 'participants', listener: (e: any, state: AppParticipantsState) => void): this;
     send(channel: 'participants', action: AppParticipantsAction): void;
+
+    on(channel: 'stages', listener: (e: any, state: AppStagesState) => void): this;
+    send(channel: 'stages', action: AppStagesAction): void;
 
     on(channel: 'teams', listener: (e: any, state: AppTeamsState) => void): this;
     send(channel: 'teams', action: AppTeamsAction): void;
@@ -38,9 +43,9 @@ declare namespace Electron {
     send(channel: AppChannel, state: AppStorageState): void;
   }
 
-  type AppChannel = 'birthday' | 'participants' | 'teams';
-  type AppAction = AppBirthdayAction | AppParticipantsAction | AppTeamsAction;
-  type AppStorageState = AppBirthdayState | AppParticipantsState | AppTeamsState;
+  type AppChannel = 'birthday' | 'participants' | 'stages' | 'teams';
+  type AppAction = AppBirthdayAction | AppParticipantsAction | AppStagesAction | AppTeamsAction;
+  type AppStorageState = AppBirthdayState | AppParticipantsState | AppStagesState | AppTeamsState;
 
   interface AppBirthdayState {
     fromDate: number;
@@ -120,5 +125,32 @@ declare namespace Electron {
         type: 'renameTeam';
         teamId: number;
         newName: string;
+      };
+
+  interface AppStagesState {
+    penaltyPoint: number;
+    stages: AppStageConfig[];
+  }
+
+  interface AppStageConfig {
+    id: number;
+    name: string;
+    responsible: string;
+    ranking: 'THE_MORE_THE_BETTER' | 'THE_LESS_THE_BETTER';
+    doCountParticipants: boolean;
+  }
+
+  type AppStagesAction =
+    | {
+        type: 'setPenaltyPoint';
+        penaltyPoint: number;
+      }
+    | {
+        type: 'setStagesCount';
+        count: number;
+      }
+    | {
+        type: 'updateStageConfig';
+        stage: AppStageConfig;
       };
 }
