@@ -5,3 +5,16 @@
 .Stage td[contenteditable] {
   cursor: text;
 }
+
+.Stage td[data-time] {
+  position: relative;
+}
+
+.Stage td[data-time]::after {
+  color: #828282;
+  content: attr(data-time);
+  font-size: .7em;
+  position: absolute;
+  right: 4px;
+  vertical-align: text-top;
+}

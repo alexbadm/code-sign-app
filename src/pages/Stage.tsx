@@ -59,7 +59,7 @@ export class Stage extends Component<IStageProps, IStageState> {
             penaltyPoints: undefined,
             resultSeconds: undefined,
             teamId: t.id,
-            teamSize: 0,
+            teamSize: undefined,
           },
       )
       .sort((a, b) => a.teamId - b.teamId);
@@ -116,6 +116,7 @@ export class Stage extends Component<IStageProps, IStageState> {
                       switch (e.keyCode) {
                         case 13:
                           e.preventDefault();
+                          e.currentTarget.blur();
                           break;
                         case 27:
                           e.currentTarget.innerText = String(r.teamSize);
@@ -139,6 +140,7 @@ export class Stage extends Component<IStageProps, IStageState> {
                       switch (e.keyCode) {
                         case 13:
                           e.preventDefault();
+                          e.currentTarget.blur();
                           break;
                         case 27:
                           e.currentTarget.innerText = String(r.resultSeconds);
@@ -146,13 +148,14 @@ export class Stage extends Component<IStageProps, IStageState> {
                       }
                     }}
                     onBlur={(e) => {
-                      const value = Number(e.target.innerText);
+                      const value = parseResultSeconds(e.target.innerText);
                       if (!isNaN(value) && value !== r.resultSeconds) {
                         this.updateItem({ ...r, resultSeconds: value });
                       } else {
-                        e.currentTarget.innerText = String(r.resultSeconds);
+                        e.currentTarget.innerText = r.resultSeconds ? String(r.resultSeconds) : '';
                       }
                     }}
+                    data-time={formatResultSeconds(r.resultSeconds)}
                   />
                   <td
                     contentEditable={true}
@@ -162,6 +165,7 @@ export class Stage extends Component<IStageProps, IStageState> {
                       switch (e.keyCode) {
                         case 13:
                           e.preventDefault();
+                          e.currentTarget.blur();
                           break;
                         case 27:
                           e.currentTarget.innerText = String(r.penaltyPoints);
@@ -201,4 +205,25 @@ export class Stage extends Component<IStageProps, IStageState> {
     this.setState({ ...this.state, results });
     updateStageResults(this.props.stage.id, results);
   }
+}
+
+function parseResultSeconds(input: string): number {
+  const colon = input.indexOf(':');
+  if (colon !== -1) {
+    const minutes = Number(input.slice(0, colon));
+    const seconds = Number(input.slice(colon + 1));
+    return minutes * 60 + seconds;
+  }
+  return Number(input);
+}
+
+function formatResultSeconds(sec: number | undefined): string {
+  if (sec === undefined) {
+    return '';
+  }
+  const minutes = String((sec / 60) | 0);
+  const seconds = String(sec % 60);
+  return `${minutes.length === 1 ? '0' + minutes : minutes}:${
+    seconds.length === 1 ? '0' + seconds : seconds
+  }`;
 }

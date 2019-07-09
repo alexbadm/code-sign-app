@@ -6,7 +6,10 @@ import './Teams.css';
 import { ITeamComposition, TeamsSummary } from './TeamsSummary';
 const { ipcRenderer } = window.require('electron');
 
-const appoint = () => ipcRenderer.send('teams', { type: 'appoint' });
+const appoint = () => {
+  ipcRenderer.send('teams', { type: 'appoint' });
+  ipcRenderer.send('stages', { type: 'resetAllStagesResults' });
+};
 const seal = () => ipcRenderer.send('teams', { type: 'seal' });
 const updateConfig = (newConfig: AppTeamsConfig) =>
   ipcRenderer.send('teams', {
@@ -85,7 +88,8 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
         ) : (
           <div className="buttons">
             <Button
-              // color="#2D9CDB"
+              color="#2D9CDB"
+              title="Распределение сбросит названия команд, принадлежность участников к командам, а также все имеющиеся результаты состязаний."
               onClick={appoint}
               children="Распределить"
               style={{ marginRight: 16 }}

@@ -34,6 +34,9 @@ export class StagesStorage extends Storage {
       case 'updateStageResults':
         this.updateStageResults(action.stageId, action.results);
         break;
+      case 'resetAllStagesResults':
+        this.state.stageResults = {};
+        break;
       default:
         console.log('[ipcMessage] unexpected action', action);
     }

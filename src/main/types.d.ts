@@ -149,7 +149,7 @@ declare namespace Electron {
 
   interface AppStageResults {
     teamId: number;
-    teamSize: number;
+    teamSize: number | undefined;
     penaltyPoints: number | undefined;
     resultSeconds: number | undefined;
   }
@@ -171,5 +171,8 @@ declare namespace Electron {
         type: 'updateStageResults';
         stageId: number;
         results: AppStageResults[];
+      }
+    | {
+        type: 'resetAllStagesResults';
       };
 }

@@ -10,6 +10,7 @@ export const Participants: FC<
   AppParticipantsState & { teams: AppTeamsState; showModal: (p?: AppParticipant) => void }
 > = ({ items, teams, showModal }) => (
   <div className="Participants">
+    <h1>Общий список участников (всего {items.length})</h1>
     <Button
       color="#2D9CDB"
       onClick={() => showModal()}

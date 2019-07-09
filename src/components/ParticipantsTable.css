@@ -11,3 +11,6 @@
 .ParticipantsTable span[role=img] {
   cursor: pointer;
 }
+.ParticipantsTable tr:hover {
+  background-color: #eee;
+}
