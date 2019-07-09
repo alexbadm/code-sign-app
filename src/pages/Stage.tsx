@@ -75,6 +75,16 @@ export class Stage extends Component<IStageProps, IStageState> {
       },
       {},
     );
+    const teamsStageResults = this.state.results.map((r) => teamStageResult(r, stage));
+    const places: number[] = teamsStageResults
+      .map((r) => r.result)
+      .sort(stage.ranking === 'THE_LESS_THE_BETTER' ? (a, b) => a - b : (a, b) => b - a)
+      .reduce((acc: number[], cur: number) => {
+        if (cur !== 0 && acc.indexOf(cur) === -1) {
+          acc.push(cur);
+        }
+        return acc;
+      }, []);
     return (
       <div className="Stage">
         <h1>
@@ -94,7 +104,7 @@ export class Stage extends Component<IStageProps, IStageState> {
           </thead>
           <tbody>
             {this.state.results.map((r, idx) => {
-              const res = teamStageResult(r, stage);
+              const res = teamsStageResults[idx];
               return (
                 <tr key={idx}>
                   <td>{teamsNames[r.teamId]}</td>
@@ -168,7 +178,7 @@ export class Stage extends Component<IStageProps, IStageState> {
                     }}
                   />
                   <td title={res.equation}>{res.hasResult ? res.result : ''}</td>
-                  <td>FUNC</td>
+                  <td>{(!res.hasResult ? places.length : places.indexOf(res.result)) + 1}</td>
                 </tr>
               );
             })}
