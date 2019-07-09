@@ -25,8 +25,18 @@
   cursor: text;
 }
 
+.Stages .forward {
+  color: #006ead;
+  cursor: pointer;
+}
+
 .Stages .bool {
   cursor: pointer;
+}
+
+.Stages .bool::after {
+  content: 'нет';
+  position: relative;
 }
 
 .Stages .bool.checked {
@@ -34,9 +44,7 @@
 }
 
 .Stages .bool.checked::after {
-  content: '✔️';
-  font-size: smaller;
-  position: relative;
+  content: 'да';
 }
 
 .Stages .config {

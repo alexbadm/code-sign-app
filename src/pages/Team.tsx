@@ -35,7 +35,7 @@ export class Team extends Component<ITeamProps, ITeamState> {
 
   public render() {
     const { isSealed, team, participants, showModal } = this.props;
-    const defaultText = team.name === null ? '<unnamed> #' + team.id : team.name;
+    const defaultText = team.name === null ? `<unnamed #${team.id}>` : team.name;
     return (
       <div className="Team">
         <h2>

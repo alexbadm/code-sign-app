@@ -1,4 +1,4 @@
-import { AppParticipant, AppTeamsConfig, AppTeamsState, AppTeamsTeam } from 'electron';
+import { AppParticipant, AppTeamsConfig, AppTeamsState } from 'electron';
 import React, { FC } from 'react';
 import { Button } from 'react-desktop/windows';
 import { Team } from './Team';
@@ -123,12 +123,12 @@ export const Teams: FC<ITeamsProps> = ({ state, participants, showModal }) => {
         />
       ) : null}
       <h1>Команды</h1>
-      {teammates.map(({ team, participants }, idx) => (
+      {teammates.map(({ team, participants: ptcps }, idx) => (
         <Team
           key={idx}
           team={team}
           isSealed={state.isSealed}
-          participants={participants}
+          participants={ptcps}
           showModal={showModal}
         />
       ))}

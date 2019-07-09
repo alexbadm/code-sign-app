@@ -130,14 +130,23 @@ declare namespace Electron {
   interface AppStagesState {
     penaltyPoint: number;
     stages: AppStageConfig[];
+    stageResults: { [stageId: number]: AppStageResults[] };
   }
 
   interface AppStageConfig {
     id: number;
     name: string;
+    penaltyPoint: number;
     responsible: string;
     ranking: 'THE_MORE_THE_BETTER' | 'THE_LESS_THE_BETTER';
     doCountParticipants: boolean;
+  }
+
+  interface AppStageResults {
+    teamId: number;
+    teamSize: number;
+    penaltyPoints: number | undefined;
+    resultSeconds: number | undefined;
   }
 
   type AppStagesAction =
@@ -152,5 +161,10 @@ declare namespace Electron {
     | {
         type: 'updateStageConfig';
         stage: AppStageConfig;
+      }
+    | {
+        type: 'updateStageResults';
+        stageId: number;
+        results: AppStageResults[];
       };
 }
