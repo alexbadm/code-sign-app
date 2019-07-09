@@ -1,4 +1,4 @@
-import { AppStageConfig, AppStageResults, AppTeamsState } from 'electron';
+import { AppStageConfig, AppStageRanking, AppStageResults, AppTeamsState } from 'electron';
 import React, { Component } from 'react';
 import { Button } from 'react-desktop/windows';
 import './Stage.css';
@@ -11,14 +11,16 @@ interface ITeamStageResult {
   equation: string;
   hasResult: boolean;
   result: number;
+  teamId: number;
 }
 
-const teamStageResult = (res: AppStageResults, conf: AppStageConfig): ITeamStageResult => {
+export const teamStageResult = (res: AppStageResults, conf: AppStageConfig): ITeamStageResult => {
   if (!res.teamSize || !res.resultSeconds) {
     return {
       equation: '',
       hasResult: false,
       result: 0,
+      teamId: res.teamId,
     };
   }
   const resultSeconds = res.resultSeconds || 0;
@@ -30,13 +32,26 @@ const teamStageResult = (res: AppStageResults, conf: AppStageConfig): ITeamStage
         equation: `(${resultSeconds} ${equationSign} ${Math.abs(penalty)}) / ${res.teamSize}`,
         hasResult: true,
         result: Math.round((resultSeconds + penalty) / res.teamSize),
+        teamId: res.teamId,
       }
     : {
         equation: `${resultSeconds} ${equationSign} ${Math.abs(penalty)}`,
         hasResult: true,
         result: resultSeconds + penalty,
+        teamId: res.teamId,
       };
 };
+
+export const makePlaces = (results: ITeamStageResult[], ranking: AppStageRanking): number[] =>
+  results
+    .map((r) => r.result)
+    .sort(ranking === 'THE_LESS_THE_BETTER' ? (a, b) => a - b : (a, b) => b - a)
+    .reduce((acc: number[], cur: number) => {
+      if (cur !== 0 && acc.indexOf(cur) === -1) {
+        acc.push(cur);
+      }
+      return acc;
+    }, []);
 
 interface IStageProps {
   goBack: () => void;
@@ -76,15 +91,7 @@ export class Stage extends Component<IStageProps, IStageState> {
       {},
     );
     const teamsStageResults = this.state.results.map((r) => teamStageResult(r, stage));
-    const places: number[] = teamsStageResults
-      .map((r) => r.result)
-      .sort(stage.ranking === 'THE_LESS_THE_BETTER' ? (a, b) => a - b : (a, b) => b - a)
-      .reduce((acc: number[], cur: number) => {
-        if (cur !== 0 && acc.indexOf(cur) === -1) {
-          acc.push(cur);
-        }
-        return acc;
-      }, []);
+    const places = makePlaces(teamsStageResults, stage.ranking);
     return (
       <div className="Stage">
         <h1>

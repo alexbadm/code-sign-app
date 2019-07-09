@@ -138,12 +138,14 @@ declare namespace Electron {
     stageResults: { [stageId: number]: AppStageResults[] };
   }
 
+  type AppStageRanking = 'THE_MORE_THE_BETTER' | 'THE_LESS_THE_BETTER';
+
   interface AppStageConfig {
     id: number;
     name: string;
     penaltyPoint: number;
     responsible: string;
-    ranking: 'THE_MORE_THE_BETTER' | 'THE_LESS_THE_BETTER';
+    ranking: AppStageRanking;
     doCountParticipants: boolean;
   }
 

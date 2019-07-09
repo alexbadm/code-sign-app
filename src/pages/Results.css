@@ -1,0 +1,42 @@
+.Results td[data-place] {
+  text-align: center;
+}
+
+.Results td[data-place]::after {
+  content: attr(data-place);
+}
+
+.Results td[data-place='1'] {
+  background-color: gold;
+  /* border-color: gold; */
+  font-weight: bold;
+}
+
+.Results td[data-place='2'] {
+  color: chocolate;
+  font-weight: bold;
+}
+
+.Results td[data-place='3'] {
+  color: chocolate;
+  font-weight: bolder;
+}
+
+.Results .diagonal {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><line x1='0' y1='0' x2='100' y2='100' stroke='%23E0E0E0' stroke-width='3' /></svg>");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%, auto;
+}
+
+.Results .diagonal > div {
+  text-align: right;
+}
+
+.Results .diagonal > div + div {
+  text-align: left;
+}
+
+.Results th {
+  text-align: left;
+}

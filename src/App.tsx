@@ -13,6 +13,7 @@ import { ParticipantForm } from './components/ParticipantForm';
 import { renderIcon } from './icons';
 import { Birthday } from './pages/Birthday';
 import { Participants } from './pages/Participants';
+import { Results } from './pages/Results';
 import { Stages } from './pages/Stages';
 import { SummaryOfCities } from './pages/SummaryOfCities';
 import { SummaryOfYears } from './pages/SummaryOfYears';
@@ -102,10 +103,20 @@ class App extends Component<IAppProps, IAppState> {
             />,
           )}
           {this.renderItem('Этапы', <Stages stages={this.state.stages} teams={this.state.teams} />)}
-          {this.renderItem('Результаты', <Text>Content 4</Text>)}
+          {this.renderItem(
+            'Результаты',
+            <Results stages={this.state.stages} teams={this.state.teams} />,
+          )}
 
-          {this.renderItem('Настройка турнира', <Text>Content 5</Text>)}
-          {this.renderItem('Резервное копирование', <Text>Резервное копирование</Text>)}
+          {/* {this.renderItem('Настройка турнира', <Text>Content 5</Text>)} */}
+          {this.renderItem(
+            'Резервное копирование',
+            <Text>
+              Резервное копирование
+              <br />
+              Не реализовано
+            </Text>,
+          )}
         </NavPane>
         <div className="floatingFlags">
           {this.state.teams.isSealed ? <div>Распределение зафиксировано</div> : null}
