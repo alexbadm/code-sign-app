@@ -47,14 +47,19 @@ declare namespace Electron {
   type AppAction = AppBirthdayAction | AppParticipantsAction | AppStagesAction | AppTeamsAction;
   type AppStorageState = AppBirthdayState | AppParticipantsState | AppStagesState | AppTeamsState;
 
+  interface AppDayMonth {
+    day: number;
+    month: number;
+  }
+
   interface AppBirthdayState {
-    fromDate: number;
-    toDate: number;
+    fromDate: AppDayMonth;
+    toDate: AppDayMonth;
   }
 
   interface AppBirthdayAction {
     type: 'fromDate' | 'toDate';
-    newDate: number;
+    newDate: AppDayMonth;
   }
 
   interface AppParticipantsState {

@@ -1,0 +1,41 @@
+.Birthday table {
+  margin-top: 16px;
+}
+
+.Birthday th {
+  text-align: left;
+  /* padding-right: 8px; */
+}
+
+.Birthday td {
+  min-width: 50px;
+}
+
+.Birthday td[contenteditable], .Birthday td[contenteditable] + td {
+  cursor: text;
+  border: 1px solid #eee;
+}
+
+.Birthday select {
+  cursor: pointer;
+  border: 0;
+  background-color: white;
+  font-size: inherit;
+}
+
+.Birthday .config > div {
+  margin-bottom: 8px;
+}
+
+.Birthday .config label {
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.Birthday .config input {
+  padding: 1px 4px;
+  width: 100px;
+}

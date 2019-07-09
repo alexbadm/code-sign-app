@@ -8,8 +8,8 @@ export class BirthdayStorage extends Storage {
     super('birthday');
     global.birthday = this.state;
     if (!this.state.fromDate || !this.state.toDate) {
-      this.state.fromDate = 1559347200000;
-      this.state.toDate = 1567296000000;
+      this.state.fromDate = { day: 1, month: 5 };
+      this.state.toDate = { day: 31, month: 7 };
     }
   }
 
