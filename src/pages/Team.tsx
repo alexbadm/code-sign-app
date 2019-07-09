@@ -65,6 +65,7 @@ export class Team extends Component<ITeamProps, ITeamState> {
             <span>
               &nbsp;
               <span
+                aria-label="ok"
                 role="img"
                 onClick={() => {
                   const headerEl = this.nameTextRef.current;
@@ -78,6 +79,7 @@ export class Team extends Component<ITeamProps, ITeamState> {
               </span>
               &nbsp;
               <span
+                aria-label="cancel"
                 role="img"
                 onClick={() => {
                   this.setState({ ...this.state, nameChanged: false });

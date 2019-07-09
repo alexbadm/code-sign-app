@@ -68,11 +68,21 @@ export const ParticipantsTable: FC<IParticipantsTableProps> = ({
               <td>{p.parent}</td>
               {editParticipant ? (
                 <td>
-                  <span role="img" onClick={() => editParticipant(p)} title="править">
+                  <span
+                    aria-label="edit"
+                    role="img"
+                    onClick={() => editParticipant(p)}
+                    title="править"
+                  >
                     ✏️
                   </span>
                   &nbsp;
-                  <span role="img" onClick={() => delConfirm(p)} title="удалить">
+                  <span
+                    aria-label="delete"
+                    role="img"
+                    onClick={() => delConfirm(p)}
+                    title="удалить"
+                  >
                     ✖️
                   </span>
                 </td>
