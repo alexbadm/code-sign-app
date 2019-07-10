@@ -20,7 +20,7 @@ export const SummaryOfYears: FC<ISummaryOfYearsProps> = ({ participants }) => (
         {Object.entries(participants.reduce((acc: { [years: string]: number }, p): {
           [years: string]: number;
         } => {
-          const years = Math.round((today.valueOf() - p.birthDate) / 31536000000);
+          const years = Math.floor((today.valueOf() - p.birthDate) / 31536000000);
           if (!(years in acc)) {
             acc[years] = 0;
           }
