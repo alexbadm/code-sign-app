@@ -23,8 +23,9 @@
     "release": "standard-version"
   },
   "build": {
-    "appId": "com.electron.${name}",
+    "appId": "com.electron.code-sign-app",
     "productName": "КЗ База данных турнира",
+    "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "extraMetadata": {
       "main": "main/index.js"
     },
@@ -39,6 +40,7 @@
       }
     ],
     "linux": {
+      "desktop": "Code Sign App",
       "target": [
         {
           "target": "7z",
@@ -56,9 +58,17 @@
             "x64",
             "ia32"
           ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
         }
       ]
     },
+    "nsis": {"language": 1049},
     "publish": {
       "provider": "github",
       "owner": "alexbadm"
