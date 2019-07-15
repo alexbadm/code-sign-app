@@ -1,6 +1,6 @@
 {
   "name": "code-sign-app",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "private": true,
   "main": "main",
   "homepage": ".",
@@ -68,7 +68,9 @@
         }
       ]
     },
-    "nsis": {"language": 1049},
+    "nsis": {
+      "language": 1049
+    },
     "publish": {
       "provider": "github",
       "owner": "alexbadm"
