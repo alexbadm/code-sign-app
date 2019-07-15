@@ -42,7 +42,7 @@ export const ParticipantsTable: FC<IParticipantsTableProps> = ({
       </thead>
       <tbody>
         {items.map((p, idx) => {
-          const yrs = Math.round((today.valueOf() - p.birthDate) / 3153600000);
+          const yrs = Math.floor((today.valueOf() - p.birthDate) / 3153600000);
           return (
             <tr key={idx}>
               <td>{p.name}</td>
