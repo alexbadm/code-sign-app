@@ -1,6 +1,7 @@
 import { AppStageConfig, AppStageRanking, AppStageResults, AppTeamsState } from 'electron';
 import React, { Component } from 'react';
 import { Button } from 'react-desktop/windows';
+import { saveAs } from '../util';
 import './Stage.css';
 const { ipcRenderer } = window.require('electron');
 
@@ -92,6 +93,16 @@ export class Stage extends Component<IStageProps, IStageState> {
     );
     const teamsStageResults = this.state.results.map((r) => teamStageResult(r, stage));
     const places = makePlaces(teamsStageResults, stage.ranking);
+
+    const header = [
+      ['Команда'],
+      ['Кол-во человек', 'Количество человек в команде на момент состязания'],
+      ['Результат'],
+      ['Штрафные баллы'],
+      ['Итоговый результат'],
+      ['Место'],
+    ];
+
     return (
       <div className="Stage">
         <h1>
@@ -101,12 +112,9 @@ export class Stage extends Component<IStageProps, IStageState> {
         <table className="bordered" cellSpacing="0">
           <thead>
             <tr>
-              <th>Команда</th>
-              <th title="Количество человек в команде на момент состязания">Кол-во человек</th>
-              <th>Результат</th>
-              <th>Штрафные баллы</th>
-              <th>Итоговый результат</th>
-              <th>Место</th>
+              {header.map((h, i) => (
+                <th key={i} children={h[0]} title={h[1]} />
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -196,10 +204,32 @@ export class Stage extends Component<IStageProps, IStageState> {
           </tbody>
         </table>
         <p>
-          * {stage.ranking === 'THE_LESS_THE_BETTER' ? 'меньше' : 'больше'}-лучше, количество
+          <i className="help">Система оценок для этапа:</i>
+          {stage.ranking === 'THE_LESS_THE_BETTER' ? 'меньше' : 'больше'}-лучше, количество
           участников{stage.doCountParticipants ? ' ' : ' не '}учитывается
         </p>
         <Button onClick={this.props.goBack} children="Назад" />
+        <Button
+          onClick={() => {
+            const data = this.state.results.map((r, idx) => {
+              const res = teamsStageResults[idx];
+              return [
+                teamsNames[r.teamId],
+                r.teamSize,
+                r.resultSeconds,
+                r.penaltyPoints,
+                res.hasResult ? res.result : undefined,
+                (!res.hasResult ? places.length : places.indexOf(res.result)) + 1,
+              ];
+            });
+
+            saveAs(
+              header.map((h) => h[0]).join(',') + '\n' + data.map((r) => r.join(',')).join('\n'),
+              `результаты-этапа-${stage.id}-${stage.name || 'без-названия'}`,
+            );
+          }}
+          children="Экспорт в CSV"
+        />
       </div>
     );
   }
