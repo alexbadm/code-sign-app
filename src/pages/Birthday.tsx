@@ -1,5 +1,7 @@
 import { AppBirthdayState, AppDayMonth, AppParticipant } from 'electron';
 import React, { FC } from 'react';
+import { Button } from 'react-desktop/windows';
+import { saveAs } from '../util';
 import './Birthday.css';
 const { ipcRenderer } = window.require('electron');
 
@@ -66,9 +68,20 @@ interface IBirthdayProps extends AppBirthdayState {
 }
 
 export const Birthday: FC<IBirthdayProps> = (props) => {
-  const { participants } = props;
   const fromDateScalar = props.fromDate.month * 100 + props.fromDate.day;
   const toDateScalar = props.toDate.month * 100 + props.toDate.day;
+  const data = props.participants
+    .filter(({ birthDate }) => {
+      const birthDateDate = new Date(birthDate);
+      const birthDateScalar = birthDateDate.getMonth() * 100 + birthDateDate.getDate();
+      return birthDateScalar >= fromDateScalar && birthDateScalar <= toDateScalar;
+    })
+    .sort((a, b) => {
+      const aDate = new Date(a.birthDate);
+      const bDate = new Date(b.birthDate);
+      return aDate.getMonth() * 100 + aDate.getDate() - bDate.getMonth() * 100 - bDate.getDate();
+    });
+
   return (
     <div className="Birthday">
       <div className="config">
@@ -131,33 +144,39 @@ export const Birthday: FC<IBirthdayProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          {participants
-            .filter(({ birthDate }) => {
-              const birthDateDate = new Date(birthDate);
-              const birthDateScalar = birthDateDate.getMonth() * 100 + birthDateDate.getDate();
-              return birthDateScalar >= fromDateScalar && birthDateScalar <= toDateScalar;
-            })
-            .sort((a, b) => {
-              const aDate = new Date(a.birthDate);
-              const bDate = new Date(b.birthDate);
-              const re =
-                aDate.getMonth() * 100 + aDate.getDate() - bDate.getMonth() * 100 - bDate.getDate();
-              return re;
-            })
-            .map((p, idx) => {
-              const birthDate = new Date(p.birthDate);
-              return (
-                <tr key={idx}>
-                  <td>
-                    {birthDate.getDate()} {monthsMap[birthDate.getMonth()]}
-                  </td>
-                  <td>{p.name}</td>
-                  <td>{birthDate.toLocaleDateString('ru')}</td>
-                </tr>
-              );
-            })}
+          {data.map((p, idx) => {
+            const birthDate = new Date(p.birthDate);
+            return (
+              <tr key={idx}>
+                <td>
+                  {birthDate.getDate()} {monthsMap[birthDate.getMonth()]}
+                </td>
+                <td>{p.name}</td>
+                <td>{birthDate.toLocaleDateString('ru')}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <Button
+        children="Экспорт в CSV"
+        onClick={() =>
+          saveAs(
+            'День рождения,Имя,Полная дата рождения\n' +
+              data
+                .map((p) => {
+                  const birthDate = new Date(p.birthDate);
+                  return `${birthDate.getDate()} ${monthsMap[birthDate.getMonth()]},${
+                    p.name
+                  },${birthDate.toLocaleDateString('ru')}`;
+                })
+                .join('\n'),
+            `именинники-${props.fromDate.day}${monthsMap[props.fromDate.month]}-${
+              props.toDate.day
+            }${monthsMap[props.toDate.month]}`,
+          )
+        }
+      />
     </div>
   );
 };

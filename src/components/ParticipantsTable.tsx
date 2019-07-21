@@ -1,6 +1,7 @@
 import { AppParticipant, AppTeamsTeam } from 'electron';
 import React, { FC } from 'react';
 import { Button } from 'react-desktop/windows';
+import { saveAs } from '../util';
 import './ParticipantsTable.css';
 const { ipcRenderer } = window.require('electron');
 
@@ -151,7 +152,7 @@ export const ParticipantsTable: FC<IParticipantsTableProps> = ({
     <div className="ParticipantsTable">
       <Button
         children="Экспорт в CSV"
-        onClick={() => csvExport(conf, defaultHeaders, participantsData, filename)}
+        onClick={() => saveAs(makeCsv(conf, defaultHeaders, participantsData), filename)}
       />
       <table className="bordered" cellSpacing="0">
         {makeDomHeader(conf, defaultHeaders)}
@@ -176,12 +177,4 @@ function delConfirm(participant: AppParticipant) {
   if (window.confirm(`Подтверждаете удаление участника ${participant.name}?`)) {
     ipcRenderer.send('participants', { type: 'deleteParticipant', name: participant.name });
   }
-}
-
-function csvExport(config: IConfig, headers: IHeaders, items: any[], filename: string) {
-  const a = document.createElement('a');
-  a.download = `${filename}-${new Date().toISOString()}.csv`;
-  a.href = 'data:text/csv;charset=utf-8,' + makeCsv(config, headers, items);
-  a.click();
-  a.remove();
 }
