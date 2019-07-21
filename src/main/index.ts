@@ -11,6 +11,7 @@ new BirthdayStorage();
 new ParticipantsStorage();
 new StagesStorage();
 new TeamsStorage();
+global.NODE_ENV = process.env.NODE_ENV || '';
 app.on('ready', createWindow);
 // app.on('before-quit', () => {
 //   console.log("app.on('before-quit')");

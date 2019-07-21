@@ -1,7 +1,13 @@
-.App {}
-
 .floatingFlags {
   position: absolute;
   right: 0;
   top: 0;
+}
+
+.test {
+  display: none;
+}
+
+.development .test {
+  display: block;
 }

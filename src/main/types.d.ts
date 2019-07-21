@@ -6,6 +6,7 @@ declare namespace NodeJS {
     teams: Electron.AppTeamsState;
 
     databasePath: string;
+    NODE_ENV: string;
   }
 }
 
@@ -15,6 +16,9 @@ declare namespace Electron {
     getGlobal(name: 'participants'): AppParticipantsState;
     getGlobal(name: 'stages'): AppStagesState;
     getGlobal(name: 'teams'): AppTeamsState;
+
+    getGlobal(name: 'databasePath'): string;
+    getGlobal(name: 'NODE_ENV'): string;
   }
 
   interface IpcRenderer extends EventEmitter {

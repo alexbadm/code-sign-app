@@ -21,6 +21,7 @@ import { Teams } from './pages/Teams';
 import './table.css';
 
 const { remote, ipcRenderer } = window.require('electron');
+const nodeEnv = remote.getGlobal('NODE_ENV');
 
 interface IAppProps {
   color?: string;
@@ -68,7 +69,7 @@ class App extends Component<IAppProps, IAppState> {
       this.setState({ ...this.state, isModalShown: true, modalEditParticipant });
     };
     return (
-      <Window background="#eee" chrome={true} color={this.props.color} theme={this.props.theme}>
+      <Window background="#eee" className={nodeEnv} chrome={true} color={this.props.color} theme={this.props.theme}>
         <NavPane openLength={200} color={this.props.color} theme={this.props.theme}>
           {this.renderItem(
             'Участники',
