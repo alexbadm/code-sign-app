@@ -95,7 +95,11 @@ export class Team extends Component<ITeamProps, ITeamState> {
           ) : null}
         </h2>
         <div className="helper-text">Количество участников: {participants.length}</div>
-        <ParticipantsTable items={participants} editParticipant={showModal} />
+        <ParticipantsTable
+          items={participants}
+          filename={`команда-${team.id}-${team.name || 'без-названия'}`}
+          editParticipant={showModal}
+        />
       </div>
     );
   }

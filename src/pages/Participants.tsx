@@ -42,7 +42,12 @@ export const Participants: FC<
       children="Добавить участника"
       style={{ marginBottom: 16 }}
     />
-    <ParticipantsTable items={items} teams={teams.teams} editParticipant={showModal} />
+    <ParticipantsTable
+      items={items}
+      filename="все-участники"
+      teams={teams.teams}
+      editParticipant={showModal}
+    />
   </div>
 );
 

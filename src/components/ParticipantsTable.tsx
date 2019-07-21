@@ -85,6 +85,7 @@ const today = Date.now();
 
 interface IParticipantsTableProps {
   config?: IConfig;
+  filename: string;
   items: AppParticipant[];
   teams?: AppTeamsTeam[];
   editParticipant?: (p: AppParticipant) => void;
@@ -92,6 +93,7 @@ interface IParticipantsTableProps {
 
 export const ParticipantsTable: FC<IParticipantsTableProps> = ({
   config,
+  filename,
   items,
   teams,
   editParticipant,
@@ -149,7 +151,7 @@ export const ParticipantsTable: FC<IParticipantsTableProps> = ({
     <div className="ParticipantsTable">
       <Button
         children="Экспорт в CSV"
-        onClick={() => csvExport(conf, defaultHeaders, participantsData)}
+        onClick={() => csvExport(conf, defaultHeaders, participantsData, filename)}
       />
       <table className="bordered" cellSpacing="0">
         {makeDomHeader(conf, defaultHeaders)}
@@ -176,9 +178,9 @@ function delConfirm(participant: AppParticipant) {
   }
 }
 
-function csvExport(config: IConfig, headers: IHeaders, items: any[]) {
+function csvExport(config: IConfig, headers: IHeaders, items: any[], filename: string) {
   const a = document.createElement('a');
-  a.download = 'table.csv';
+  a.download = `${filename}-${new Date().toISOString()}.csv`;
   a.href = 'data:text/csv;charset=utf-8,' + makeCsv(config, headers, items);
   a.click();
   a.remove();
