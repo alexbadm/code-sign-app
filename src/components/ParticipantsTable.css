@@ -14,3 +14,6 @@
 .ParticipantsTable tr:hover {
   background-color: #eee;
 }
+.ParticipantsTable button {
+  margin-bottom: 8px;
+}

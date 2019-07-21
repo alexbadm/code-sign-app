@@ -11,12 +11,6 @@ export const Participants: FC<
 > = ({ items, teams, showModal }) => (
   <div className="Participants">
     <h1>Общий список участников (всего {items.length})</h1>
-    <Button
-      color="#2D9CDB"
-      onClick={() => showModal()}
-      children="Добавить участника"
-      style={{ marginBottom: 16 }}
-    />
     <div className="test">
       <h4>Тестирование</h4>
       <button
@@ -26,9 +20,8 @@ export const Participants: FC<
             type: 'addParticipant',
           })
         }
-      >
-        Generate 1 participant
-      </button>
+        children="Generate 1 participant"
+      />
       <button
         onClick={() =>
           ipcRenderer.send('participants', {
@@ -36,19 +29,19 @@ export const Participants: FC<
             type: 'addParticipants',
           })
         }
-      >
-        Generate 30 participants
-      </button>
+        children="Generate 30 participants"
+      />
       <button
-        onClick={() =>
-          ipcRenderer.send('participants', {
-            type: 'deleteFakes',
-          })
-        }
-      >
-        Remove test data
-      </button>
+        onClick={() => ipcRenderer.send('participants', { type: 'deleteFakes' })}
+        children="Remove test data"
+      />
     </div>
+    <Button
+      color="#2D9CDB"
+      onClick={() => showModal()}
+      children="Добавить участника"
+      style={{ marginBottom: 16 }}
+    />
     <ParticipantsTable items={items} teams={teams.teams} editParticipant={showModal} />
   </div>
 );
