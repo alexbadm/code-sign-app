@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import './modal.css';
+import './Modal.css';
 
 interface IModalProps {
   height?: number;

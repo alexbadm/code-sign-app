@@ -8,7 +8,7 @@ import {
 import React, { Component } from 'react';
 import { NavPane, NavPaneItem, Text, Window } from 'react-desktop/windows';
 import './App.css';
-import { Modal } from './components/modal';
+import { Modal } from './components/Modal';
 import { ParticipantForm } from './components/ParticipantForm';
 import { renderIcon } from './icons';
 import { Birthday } from './pages/Birthday';
