@@ -40,3 +40,7 @@
 .Results th {
   text-align: left;
 }
+
+.Results button {
+  margin-top: 16px;
+}

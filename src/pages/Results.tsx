@@ -1,5 +1,7 @@
 import { AppStagesState, AppTeamsState } from 'electron';
 import React, { FC } from 'react';
+import { Button } from 'react-desktop/windows';
+import { saveAs } from '../util';
 import './Results.css';
 import { makePlaces, teamStageResult } from './Stage';
 
@@ -45,6 +47,13 @@ export const Results: FC<IResultsProps> = (props: IResultsProps) => {
     return acc;
   }, {});
 
+  const header: string[] = ['Этап - Команда', ...teams.map((t) => t.name || `<unnamed #${t.id}>`)];
+  const body: Array<[string, ...number[]]> = stagePlaces.map((s) => [
+    s.name,
+    ...teams.map((t) => s.places[t.id]),
+  ]);
+  const footer: [string, ...number[]] = ['Итого', ...teams.map((team) => teamsPlaces[team.id])];
+
   return (
     <div className="Results">
       <h1>Общая таблица результатов</h1>
@@ -55,30 +64,40 @@ export const Results: FC<IResultsProps> = (props: IResultsProps) => {
               <div>Команда</div>
               <div>Этап</div>
             </th>
-            {teams.map((t, idx) => (
-              <td key={idx}>{t.name || `<unnamed #${t.id}>`}</td>
+            {header.slice(1).map((h, idx) => (
+              <td key={idx} children={h} />
             ))}
           </tr>
         </thead>
         <tbody>
-          {stagePlaces.map((s, idx) => (
+          {body.map((row, idx) => (
             <tr key={idx}>
-              <td>{s.name}</td>
-              {teams.map((t, i) => (
-                <td key={i} data-place={s.places[t.id]} />
+              <td children={row[0]} />
+              {row.slice(1).map((r, i) => (
+                <td key={i} data-place={r} />
               ))}
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
-            <th>Итого</th>
-            {teams.map((team, i) => {
-              return <td key={i} data-place={teamsPlaces[team.id]} />;
-            })}
+            <th children={footer[0]} />
+            {footer.slice(1).map((f, i) => (
+              <td key={i} data-place={f} />
+            ))}
           </tr>
         </tfoot>
       </table>
+
+      <Button
+        children="Экспорт в CSV"
+        onClick={() =>
+          saveAs(
+            `${header.join(',')}\n${body.map((r) => r.join(',')).join('\n')}\n${footer.join(',')}`,
+            'результаты',
+          )
+        }
+      />
 
       <h2>Итоговое</h2>
       {byPlace
