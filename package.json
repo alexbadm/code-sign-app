@@ -4,6 +4,7 @@
   "private": true,
   "main": "main",
   "homepage": ".",
+  "description": "The Code Sign event database app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexbadm/code-sign-app.git"
@@ -41,9 +42,16 @@
     ],
     "linux": {
       "desktop": "Code Sign App",
+      "executableName": "code-sign-app",
       "target": [
         {
           "target": "7z",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
           "arch": [
             "x64"
           ]
@@ -70,6 +78,10 @@
     },
     "nsis": {
       "language": 1049
+    },
+    "appImage": {
+      "category": "Utility",
+      "synopsis": "The Code Sign event database app"
     },
     "publish": {
       "provider": "github",

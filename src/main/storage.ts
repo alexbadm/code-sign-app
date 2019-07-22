@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 let fromFileState = {};
-const dirname = path.dirname(process.argv[0]); // __dirname;
+const dirname = app.getPath('userData');
 const filename = path.join(dirname, 'database.json');
 global.databasePath = filename;
 console.log('Database path is: "%s"', filename);
@@ -86,9 +86,9 @@ export abstract class Storage {
 
   constructor(protected channel: AppChannel) {
     this.state = Storage.state[channel] = Storage.state[channel] || {};
-    console.log('[Storage] <%s> this.state', channel, this.state);
+    // console.log('[Storage] <%s> this.state', channel, this.state);
     Storage.instances[channel] = this;
-    console.log('Storage instances', Storage.instances);
+    // console.log('Storage instances', Storage.instances);
   }
 
   public abstract ipcMessage(action: AppAction): AppStorageState;
