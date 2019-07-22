@@ -7,7 +7,7 @@ import {
   AppTeamsState,
 } from 'electron';
 import React, { Component } from 'react';
-import { NavPane, NavPaneItem, Text, Window } from 'react-desktop/windows';
+import { NavPane, NavPaneItem, Window } from 'react-desktop/windows';
 import './App.css';
 import { Modal } from './components/Modal';
 import { ParticipantForm } from './components/ParticipantForm';

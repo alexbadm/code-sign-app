@@ -1,4 +1,5 @@
 import { app, AppAction, AppChannel, BrowserWindow } from 'electron';
+import path from 'path';
 import { BackupStorage } from './backup';
 import { BirthdayStorage } from './birthday';
 import { ParticipantsStorage } from './participants';
@@ -24,7 +25,7 @@ function createWindow() {
   const win = new BrowserWindow({
     center: true,
     height: 700,
-    // show: false,
+    icon: path.resolve(__dirname, '..', 'build', 'icon.icns'),
     title: 'КЗ База данных турнира',
     webPreferences: {
       nodeIntegration: true,
