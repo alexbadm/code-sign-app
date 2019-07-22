@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/alexbadm/code-sign-app/compare/v1.1.0...v1.2.0) (2019-07-22)
+
+
+### Features
+
+* implemented database backup ([fb5fddb](https://github.com/alexbadm/code-sign-app/commit/fb5fddb))
+
+
+
 ## [1.1.0](https://github.com/alexbadm/code-sign-app/compare/v1.0.0...v1.1.0) (2019-07-21)
 
 
