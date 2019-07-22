@@ -22,6 +22,9 @@ declare namespace Electron {
   }
 
   interface IpcRenderer extends EventEmitter {
+    on(channel: 'backup', listener: (e: any, state: AppBackupState) => void): this;
+    send(channel: 'backup', action: AppBackupAction): void;
+
     on(channel: 'birthday', listener: (e: any, state: AppBirthdayState) => void): this;
     send(channel: 'birthday', action: AppBirthdayAction): void;
 
@@ -47,9 +50,29 @@ declare namespace Electron {
     send(channel: AppChannel, state: AppStorageState): void;
   }
 
-  type AppChannel = 'birthday' | 'participants' | 'stages' | 'teams';
-  type AppAction = AppBirthdayAction | AppParticipantsAction | AppStagesAction | AppTeamsAction;
-  type AppStorageState = AppBirthdayState | AppParticipantsState | AppStagesState | AppTeamsState;
+  type AppChannel = 'backup' | 'birthday' | 'participants' | 'stages' | 'teams';
+  type AppAction =
+    | AppBackupAction
+    | AppBirthdayAction
+    | AppParticipantsAction
+    | AppStagesAction
+    | AppTeamsAction;
+  type AppStorageState =
+    | AppBackupState
+    | AppBirthdayState
+    | AppParticipantsState
+    | AppStagesState
+    | AppTeamsState;
+
+  interface AppBackupAction {
+    type: 'restore';
+    data: any;
+  }
+
+  interface AppBackupState {
+    lastRestoreStatus: 'ok' | 'fail';
+    message: string;
+  }
 
   interface AppDayMonth {
     day: number;

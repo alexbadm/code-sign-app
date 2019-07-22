@@ -1,4 +1,4 @@
-import { AppAction, AppChannel, AppStorageState, WebContents } from 'electron';
+import { app, AppAction, AppBackupState, AppChannel, AppStorageState, WebContents } from 'electron';
 import fs from 'fs';
 import path from 'path';
 
@@ -43,6 +43,36 @@ export abstract class Storage {
     if (store && Storage.webContents) {
       Storage.webContents.send(channel, store.state);
     }
+  }
+
+  protected static restoreGlobalState(data: any): AppBackupState {
+    const allowedKeys = ['birthday', 'participants', 'stages', 'teams'];
+    if (Object.keys(data).some((key) => allowedKeys.indexOf(key) === -1)) {
+      console.log('[Storage.restoreGlobalState] структура данных неприменима');
+      return {
+        lastRestoreStatus: 'fail',
+        message: 'структура данных неприменима',
+      };
+    }
+
+    allowedKeys.forEach((key) => {
+      if (key in data) {
+        console.log('[Storage.restoreGlobalState] applying %s', key);
+        Storage.state[key] = data[key];
+      }
+    });
+
+    // Storage.webContents.reload();
+    setTimeout(() => {
+      app.relaunch();
+      app.exit();
+    }, 200);
+
+    console.log('[Storage.restoreGlobalState] ok');
+    return {
+      lastRestoreStatus: 'ok',
+      message: '',
+    };
   }
 
   private static webContents: WebContents;

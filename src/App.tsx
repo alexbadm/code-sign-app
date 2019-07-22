@@ -1,4 +1,5 @@
 import {
+  AppBackupState,
   AppBirthdayState,
   AppParticipant,
   AppParticipantsState,
@@ -11,6 +12,7 @@ import './App.css';
 import { Modal } from './components/Modal';
 import { ParticipantForm } from './components/ParticipantForm';
 import { renderIcon } from './icons';
+import { Backup } from './pages/Backup';
 import { Birthday } from './pages/Birthday';
 import { Participants } from './pages/Participants';
 import { Results } from './pages/Results';
@@ -50,6 +52,11 @@ class App extends Component<IAppProps, IAppState> {
       stages: remote.getGlobal('stages'),
       teams: remote.getGlobal('teams'),
     };
+    ipcRenderer.on('backup', (_: any, backup: AppBackupState) => {
+      if (backup.lastRestoreStatus !== 'ok') {
+        alert(`Ошибка восстановления из файла:\n${backup.message}`);
+      }
+    });
     ipcRenderer.on('birthday', (_: any, birthday: AppBirthdayState) => {
       this.setState({ ...this.state, birthday });
     });
@@ -118,11 +125,12 @@ class App extends Component<IAppProps, IAppState> {
           {/* {this.renderItem('Настройка турнира', <Text>Content 5</Text>)} */}
           {this.renderItem(
             'Резервное копирование',
-            <Text>
-              Резервное копирование
-              <br />
-              Не реализовано
-            </Text>,
+            <Backup
+              birthday={this.state.birthday}
+              participants={this.state.participants}
+              stages={this.state.stages}
+              teams={this.state.teams}
+            />,
           )}
         </NavPane>
         <div className="floatingFlags">
